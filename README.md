@@ -1,0 +1,2 @@
+# xgplib
+IGDB data synchronizer.
