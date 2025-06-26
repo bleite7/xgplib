@@ -1,5 +1,4 @@
 ﻿using System.Net.Http.Json;
-using XgpLib.SyncService.Infrastructure.Interfaces.Services;
 
 namespace XgpLib.SyncService.Infrastructure.Services;
 
@@ -18,11 +17,9 @@ public class TokenManagerService(
             return TokenCache.GetToken();
         }
 
-        // Use semaphore to ensure only one thread can fetch the token at a time
         await Semaphore.WaitAsync(cancellationToken);
         try
         {
-            // Double-check if the token is still valid after acquiring the semaphore
             if (TokenCache.IsTokenValid())
             {
                 return TokenCache.GetToken();
@@ -40,7 +37,7 @@ public class TokenManagerService(
             var tokenResponse = await response.Content.ReadFromJsonAsync<TwitchTokenResponse>(cancellationToken);
             if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.AccessToken))
             {
-                throw new InvalidOperationException("Failed to retrieve a valid token from the response.");
+                throw new InvalidOperationException("Failed to retrieve a valid access token from Twitch.");
             }
 
             TokenCache.SetToken(tokenResponse.AccessToken, tokenResponse.ExpiresIn);

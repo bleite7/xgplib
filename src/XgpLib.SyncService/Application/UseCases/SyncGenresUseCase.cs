@@ -1,7 +1,7 @@
 ﻿namespace XgpLib.SyncService.Application.UseCases;
 
 public class SyncGenresUseCase(
-    IIgdbService igdbService, 
+    IIgdbService igdbService,
     ILogger<SyncGenresUseCase> logger)
 {
     private readonly IIgdbService _igdbService = igdbService;
@@ -12,7 +12,7 @@ public class SyncGenresUseCase(
         var genresFromApi = await _igdbService.FetchGenresAsync(cancellationToken);
         if (genresFromApi is null || !genresFromApi.Any())
         {
-            _logger.LogWarning("Nenhum gênero encontrado na API do IGDB.");
+            _logger.LogWarning("No genres found in the API response. Skipping synchronization.");
             return;
         }
 
@@ -22,12 +22,9 @@ public class SyncGenresUseCase(
             Name = genreDto.Name,
             Slug = genreDto.Slug,
         });
-
-        _logger.LogInformation("{Count} gêneros encontrados. Sincronizando com o banco de dados...", genres.Count());
         foreach (var genre in genres)
         {
-            _logger.LogInformation("Sincronizando gênero: {Name}", genre.Name);
+            _logger.LogInformation("Genre synchronized: {GenreId} - {GenreName} ({GenreSlug})", genre.Id, genre.Name, genre.Slug);
         }
-        _logger.LogInformation("Sincronização de gêneros concluída com sucesso!");
     }
 }

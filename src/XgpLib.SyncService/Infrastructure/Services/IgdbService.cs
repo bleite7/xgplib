@@ -11,7 +11,13 @@ public class IgdbService : IIgdbService
     public IgdbService(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri(configuration["Igdb:BaseUrl"]);
+
+        var baseUrl = configuration["Igdb:BaseUrl"];
+        if (string.IsNullOrWhiteSpace(baseUrl))
+        {
+            throw new ArgumentException("The configuration value for 'Igdb:BaseUrl' cannot be null or empty.", nameof(configuration));
+        }
+        _httpClient.BaseAddress = new Uri(baseUrl);
     }
 
     public async Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken)
@@ -21,6 +27,7 @@ public class IgdbService : IIgdbService
 
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<IEnumerable<IgdbGenre>>(cancellationToken);
+        var genres = await response.Content.ReadFromJsonAsync<IEnumerable<IgdbGenre>>(cancellationToken);
+        return genres ?? [];
     }
 }
