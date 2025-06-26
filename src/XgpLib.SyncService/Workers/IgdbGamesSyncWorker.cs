@@ -1,33 +1,33 @@
 namespace XgpLib.SyncService.Workers;
 
-public class IgdbGenresSyncWorker(
+public class IgdbGamesSyncWorker(
     IServiceProvider serviceProvider,
-    ILogger<IgdbGenresSyncWorker> logger) : BackgroundService
+    ILogger<IgdbGamesSyncWorker> logger) : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
-    private readonly ILogger<IgdbGenresSyncWorker> _logger = logger;
+    private readonly ILogger<IgdbGamesSyncWorker> _logger = logger;
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
             var startTime = DateTimeOffset.Now;
-            _logger.LogInformation("Starting genres synchronization at {Time}", startTime);
+            _logger.LogInformation("Starting games synchronization at {Time}", startTime);
 
             // Using the service provider to create a scope
             using (var scope = _serviceProvider.CreateScope())
             {
-                var syncGenresUseCase = scope.ServiceProvider.GetRequiredService<SyncGenresUseCase>();
+                var syncGamesUseCase = scope.ServiceProvider.GetRequiredService<SyncGamesUseCase>();
                 try
                 {
-                    await syncGenresUseCase.ExecuteAsync(cancellationToken);
+                    await syncGamesUseCase.ExecuteAsync(cancellationToken);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "An error occurred while synchronizing genres: {Message}", ex.Message);
+                    _logger.LogError(ex, "An error occurred while synchronizing games: {Message}", ex.Message);
                 }
             }
-            _logger.LogInformation("Genres synchronization completed at {Time} in {Elapsed}", DateTimeOffset.Now, (DateTimeOffset.Now - startTime));
+            _logger.LogInformation("Games synchronization completed at {Time} in {Elapsed}", DateTimeOffset.Now, (DateTimeOffset.Now - startTime));
             await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
         }
 

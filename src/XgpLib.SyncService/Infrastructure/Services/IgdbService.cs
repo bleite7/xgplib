@@ -19,14 +19,38 @@ public class IgdbService : IIgdbService
         _httpClient.BaseAddress = new Uri(baseUrl);
     }
 
-    public async Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken)
+    public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
+    public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformAsync(IEnumerable<int> platformIds, CancellationToken cancellationToken)
     {
-        var requestBody = new StringContent("fields name,slug; limit 500;", Encoding.UTF8, "text/plain");
-        var response = await _httpClient.PostAsync("genres", requestBody, cancellationToken);
+        var platformsFilter = string.Join(",", platformIds);
+        var whereClause = $"platforms = ({platformsFilter})";
+        return FetchAllPagedAsync<IgdbGame>("games", "id,name,slug,platforms", whereClause, cancellationToken);
+    }
 
-        response.EnsureSuccessStatusCode();
+    private async Task<IEnumerable<T>> FetchAllPagedAsync<T>(string endpoint, string fields, string? whereClause, CancellationToken cancellationToken)
+    {
+        const int limit = 500;
+        int offset = 0;
+        var allItems = new List<T>();
 
-        var genres = await response.Content.ReadFromJsonAsync<IEnumerable<IgdbGenre>>(cancellationToken);
-        return genres ?? [];
+        while (true)
+        {
+            var query = $"fields {fields};{(string.IsNullOrWhiteSpace(whereClause) ? "" : $" where {whereClause};")} limit {limit}; offset {offset};";
+            var requestBody = new StringContent(query, Encoding.UTF8, "text/plain");
+            var response = await _httpClient.PostAsync(endpoint, requestBody, cancellationToken);
+
+            response.EnsureSuccessStatusCode();
+
+            var items = await response.Content.ReadFromJsonAsync<IEnumerable<T>>(cancellationToken);
+            var itemsList = items?.ToList() ?? [];
+
+            if (itemsList.Count == 0)
+                break;
+
+            allItems.AddRange(itemsList);
+            offset += limit;
+        }
+
+        return allItems;
     }
 }
