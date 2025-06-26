@@ -1,5 +1,4 @@
 using Serilog;
-using XgpLib.SyncService.Infrastructure.HttpHandlers;
 
 namespace XgpLib.SyncService;
 
