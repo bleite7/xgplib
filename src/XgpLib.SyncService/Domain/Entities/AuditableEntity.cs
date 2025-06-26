@@ -1,6 +1,6 @@
-﻿namespace XgpLib.SyncService.Domain;
+﻿namespace XgpLib.SyncService.Domain.Entities;
 
-public class AuditableEntity
+public class AuditableEntity : BaseEntity
 {
     public DateTimeOffset CreatedAt { get; set; }
     public string? CreatedBy { get; set; }

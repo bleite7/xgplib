@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace XgpLib.SyncService.Domain;
+namespace XgpLib.SyncService.Domain.Entities;
 
 public class Game : AuditableEntity
 {
