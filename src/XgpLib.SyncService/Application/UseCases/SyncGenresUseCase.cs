@@ -22,7 +22,7 @@ public class SyncGenresUseCase(
         {
             Id = genreDto.Id,
             Name = genreDto.Name,
-            Slug = genreDto.Slug,
+            //Slug = genreDto.Slug,
         });
 
         await _genreRepository.AddOrUpdateRangeAsync(genres, cancellationToken);
