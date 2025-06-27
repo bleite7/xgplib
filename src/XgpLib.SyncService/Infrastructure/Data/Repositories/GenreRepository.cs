@@ -12,7 +12,7 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
     {
         foreach (var genre in genres)
         {
-            var existingGenre = await _context.Genres.FindAsync(genre.Id, cancellationToken);
+            var existingGenre = await _context.Genres.FindAsync([genre.Id], cancellationToken);
             if (existingGenre == null)
             {
                 _context.Genres.Add(genre);
