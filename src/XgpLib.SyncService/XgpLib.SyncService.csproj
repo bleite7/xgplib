@@ -6,6 +6,7 @@
 		<UserSecretsId>dotnet-XgpLib.SyncService-f6ed8e10-297c-4619-9037-a60f3a67e9d4</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.17" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.17">
 		  <PrivateAssets>all</PrivateAssets>

@@ -21,7 +21,9 @@ public class Program
 
         // Create and configure database context
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddDbContext<XgpLibDbContext>(options => options.UseNpgsql(connectionString));
+        builder.Services.AddDbContext<XgpLibDbContext>(options => options
+            .UseNpgsql(connectionString)
+            .UseSnakeCaseNamingConvention());
 
         // Register services
         builder.Services.AddScoped<SyncGenresUseCase>();

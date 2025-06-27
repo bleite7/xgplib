@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace XgpLib.SyncService.Domain.Entities;
 
-namespace XgpLib.SyncService.Domain.Entities;
-
-[Table("Games")]
 public class Game : AuditableEntity
 {
     public string Name { get; set; } = string.Empty;
