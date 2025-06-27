@@ -2,9 +2,11 @@
 
 public class SyncGenresUseCase(
     IIgdbService igdbService,
+    IGenreRepository genreRepository,
     ILogger<SyncGenresUseCase> logger)
 {
     private readonly IIgdbService _igdbService = igdbService;
+    private readonly IGenreRepository _genreRepository = genreRepository;
     private readonly ILogger<SyncGenresUseCase> _logger = logger;
 
     public async Task ExecuteAsync(CancellationToken cancellationToken = default)
@@ -22,9 +24,7 @@ public class SyncGenresUseCase(
             Name = genreDto.Name,
             Slug = genreDto.Slug,
         });
-        foreach (var genre in genres)
-        {
-            _logger.LogInformation("Genre synchronized: {GenreId} - {GenreName} ({GenreSlug})", genre.Id, genre.Name, genre.Slug);
-        }
+
+        await _genreRepository.AddOrUpdateRangeAsync(genres, cancellationToken);
     }
 }

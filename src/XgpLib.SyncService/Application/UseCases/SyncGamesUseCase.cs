@@ -9,7 +9,7 @@ public class SyncGamesUseCase(
 
     public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
-        var gamesFromApi = await _igdbService.FetchGamesByPlatformAsync([7, 11], cancellationToken);
+        var gamesFromApi = await _igdbService.FetchGamesByPlatformAsync([3], cancellationToken);
         if (gamesFromApi is null || !gamesFromApi.Any())
         {
             _logger.LogWarning("No games found in the API response. Skipping synchronization.");
