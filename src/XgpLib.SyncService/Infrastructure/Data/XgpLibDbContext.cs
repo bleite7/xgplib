@@ -44,6 +44,7 @@ public class XgpLibDbContext(DbContextOptions<XgpLibDbContext> options) : DbCont
             }
             else if (entry.State == EntityState.Modified)
             {
+                entry.Property(e => e.CreatedAt).IsModified = false;
                 entry.Entity.ModifiedAt = utcNow;
             }
         }

@@ -19,7 +19,6 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
             }
             else
             {
-                genre.CreatedAt = existingGenre.CreatedAt; // Preserve created date
                 _context.Entry(existingGenre).CurrentValues.SetValues(genre);
             }
         }
