@@ -17,6 +17,7 @@ namespace XgpLib.SyncService.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
+                    data = table.Column<string>(type: "jsonb", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     created_by = table.Column<string>(type: "text", nullable: true),
                     modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -33,6 +34,8 @@ namespace XgpLib.SyncService.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
+                    slug = table.Column<string>(type: "text", nullable: false),
+                    data = table.Column<string>(type: "jsonb", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     created_by = table.Column<string>(type: "text", nullable: true),
                     modified_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),

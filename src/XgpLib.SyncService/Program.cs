@@ -26,11 +26,12 @@ public class Program
             .UseSnakeCaseNamingConvention());
 
         // Register services
-        builder.Services.AddScoped<SyncGenresUseCase>();
         builder.Services.AddScoped<SyncGamesUseCase>();
+        builder.Services.AddScoped<SyncGenresUseCase>();
         builder.Services.AddScoped<AuthenticationHandler>();
 
         // Register HTTP clients
+        builder.Services.AddScoped<IGameRepository, GameRepository>();
         builder.Services.AddScoped<IGenreRepository, GenreRepository>();
         builder.Services.AddHttpClient<ITokenManagerService, TokenManagerService>();
         builder.Services.AddHttpClient<IIgdbService, IgdbService>().AddHttpMessageHandler<AuthenticationHandler>();
@@ -39,8 +40,8 @@ public class Program
         builder.Services.AddSerilog();
 
         // Register the synchronization workers
-        builder.Services.AddHostedService<IgdbGenresSyncWorker>();
         builder.Services.AddHostedService<IgdbGamesSyncWorker>();
+        builder.Services.AddHostedService<IgdbGenresSyncWorker>();
 
         // Run the application
         var host = builder.Build();

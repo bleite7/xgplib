@@ -12,7 +12,7 @@ using XgpLib.SyncService.Infrastructure.Data;
 namespace XgpLib.SyncService.Migrations
 {
     [DbContext(typeof(XgpLibDbContext))]
-    [Migration("20250627231320_InitialCreate")]
+    [Migration("20250703004508_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace XgpLib.SyncService.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.17")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -38,6 +38,11 @@ namespace XgpLib.SyncService.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text")
                         .HasColumnName("created_by");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("data");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text")
@@ -72,6 +77,11 @@ namespace XgpLib.SyncService.Migrations
                         .HasColumnType("text")
                         .HasColumnName("created_by");
 
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("data");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text")
                         .HasColumnName("last_modified_by");
@@ -84,6 +94,11 @@ namespace XgpLib.SyncService.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("name");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("slug");
 
                     b.HasKey("Id")
                         .HasName("pk_genres");

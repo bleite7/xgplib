@@ -1,13 +1,17 @@
-﻿namespace XgpLib.SyncService.Application.UseCases;
+﻿using System.Text.Json;
+
+namespace XgpLib.SyncService.Application.UseCases;
 
 public class SyncGamesUseCase(
     IIgdbService igdbService,
+    IGameRepository gameRepository,
     ILogger<SyncGamesUseCase> logger)
 {
     private readonly IIgdbService _igdbService = igdbService;
+    private readonly IGameRepository _gameRepository = gameRepository;
     private readonly ILogger<SyncGamesUseCase> _logger = logger;
 
-    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var gamesFromApi = await _igdbService.FetchGamesByPlatformAsync([3], cancellationToken);
         if (gamesFromApi is null || !gamesFromApi.Any())
@@ -20,10 +24,9 @@ public class SyncGamesUseCase(
         {
             Id = gameDto.Id,
             Name = gameDto.Name,
+            Data = JsonSerializer.Serialize(gameDto),
         });
-        foreach (var game in games)
-        {
-            _logger.LogInformation("Game synchronized: {GameId} - {GameName}", game.Id, game.Name);
-        }
+
+        await _gameRepository.AddOrUpdateRangeAsync(games, cancellationToken);
     }
 }

@@ -24,7 +24,9 @@ public class IgdbService : IIgdbService
     {
         var platformsFilter = string.Join(",", platformIds);
         var whereClause = $"platforms = ({platformsFilter})";
-        return FetchAllPagedAsync<IgdbGame>("games", "id,name,slug,platforms", whereClause, cancellationToken);
+        var fields = "name,slug,summary,storyline,platforms,genres";
+
+        return FetchAllPagedAsync<IgdbGame>("games", fields, whereClause, cancellationToken);
     }
 
     private async Task<IEnumerable<T>> FetchAllPagedAsync<T>(string endpoint, string fields, string? whereClause, CancellationToken cancellationToken)
