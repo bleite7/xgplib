@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.Application", "src\XgpLib.SyncService.Application\XgpLib.SyncService.Application.csproj", "{B8F4A014-3940-46B9-A396-5B361370C547}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.Infrastructure", "src\XgpLib.SyncService.Infrastructure\XgpLib.SyncService.Infrastructure.csproj", "{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{B8F4A014-3940-46B9-A396-5B361370C547}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8F4A014-3940-46B9-A396-5B361370C547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8F4A014-3940-46B9-A396-5B361370C547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +43,7 @@ Global
 		{6BE66D7C-10F1-52F0-4AE0-9690CD58A149} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B8F4A014-3940-46B9-A396-5B361370C547} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4985B8B7-FF45-4F2C-9ADC-E0D36B9985A9}
