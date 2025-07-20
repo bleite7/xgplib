@@ -7,7 +7,7 @@ namespace XgpLib.SyncService;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         // Configure Serilog for logging
         Log.Logger = new LoggerConfiguration()
@@ -45,6 +45,6 @@ public class Program
 
         // Run the application
         var host = builder.Build();
-        host.Run();
+        await host.RunAsync();
     }
 }
