@@ -14,20 +14,21 @@ public class IgdbGamesSyncWorker(
             var startTime = DateTimeOffset.Now;
             _logger.LogInformation("Starting games synchronization at {Time}", startTime);
 
-            // Using the service provider to create a scope
             using (var scope = _serviceProvider.CreateScope())
             {
                 var syncGamesUseCase = scope.ServiceProvider.GetRequiredService<SyncGamesUseCase>();
                 try
                 {
                     await syncGamesUseCase.ExecuteAsync(cancellationToken);
+                    _logger.LogInformation("Games synchronization finished successfully at {Time}", DateTimeOffset.Now);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "An error occurred while synchronizing games: {Message}", ex.Message);
                 }
             }
-            _logger.LogInformation("Games synchronization completed at {Time} in {Elapsed}", DateTimeOffset.Now, (DateTimeOffset.Now - startTime));
+            var elapsed = DateTimeOffset.Now - startTime;
+            _logger.LogInformation("Games synchronization completed at {Time} (Elapsed: {Elapsed})", DateTimeOffset.Now, elapsed);
             await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
         }
 

@@ -13,12 +13,16 @@ public class SyncGamesUseCase(
 
     public async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Fetching games from IGDB API for platform(s): {PlatformIds}", "[3]");
+
         var gamesFromApi = await _igdbService.FetchGamesByPlatformAsync([3], cancellationToken);
         if (gamesFromApi is null || !gamesFromApi.Any())
         {
             _logger.LogWarning("No games found in the API response. Skipping synchronization.");
             return;
         }
+
+        _logger.LogInformation("Fetched {Count} games from IGDB API.", gamesFromApi.Count());
 
         var games = gamesFromApi.Select(gameDto => new Game
         {
@@ -27,6 +31,15 @@ public class SyncGamesUseCase(
             Data = JsonSerializer.Serialize(gameDto),
         });
 
-        await _gameRepository.AddOrUpdateRangeAsync(games, cancellationToken);
+        try
+        {
+            await _gameRepository.AddOrUpdateRangeAsync(games, cancellationToken);
+            _logger.LogInformation("Successfully synchronized {Count} games to the database.", gamesFromApi.Count());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to synchronize games to the database: {Message}", ex.Message);
+            throw;
+        }
     }
 }
