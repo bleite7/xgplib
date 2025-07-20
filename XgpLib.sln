@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService", "src\XgpLib.SyncService\XgpLib.SyncService.csproj", "{6BE66D7C-10F1-52F0-4AE0-9690CD58A149}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.Domain", "src\XgpLib.SyncService.Domain\XgpLib.SyncService.Domain.csproj", "{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,17 @@ Global
 		{6BE66D7C-10F1-52F0-4AE0-9690CD58A149}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BE66D7C-10F1-52F0-4AE0-9690CD58A149}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BE66D7C-10F1-52F0-4AE0-9690CD58A149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6BE66D7C-10F1-52F0-4AE0-9690CD58A149} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4985B8B7-FF45-4F2C-9ADC-E0D36B9985A9}
