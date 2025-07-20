@@ -19,6 +19,7 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
+	  <ProjectReference Include="..\XgpLib.SyncService.Application\XgpLib.SyncService.Application.csproj" />
 	  <ProjectReference Include="..\XgpLib.SyncService.Domain\XgpLib.SyncService.Domain.csproj" />
 	</ItemGroup>
 </Project>
