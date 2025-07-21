@@ -2,7 +2,7 @@
 
 namespace XgpLib.SyncService.Infrastructure.HttpHandlers;
 
-public class AuthenticationHandler(
+public class TwitchAuthenticationHandler(
     ITokenManagerService tokenManager,
     IConfiguration configuration) : DelegatingHandler
 {

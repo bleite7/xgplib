@@ -28,13 +28,13 @@ public class Program
         // Register services
         builder.Services.AddScoped<SyncGamesUseCase>();
         builder.Services.AddScoped<SyncGenresUseCase>();
-        builder.Services.AddScoped<AuthenticationHandler>();
+        builder.Services.AddScoped<TwitchAuthenticationHandler>();
 
         // Register HTTP clients
         builder.Services.AddScoped<IGameRepository, GameRepository>();
         builder.Services.AddScoped<IGenreRepository, GenreRepository>();
         builder.Services.AddHttpClient<ITokenManagerService, TokenManagerService>();
-        builder.Services.AddHttpClient<IIgdbService, IgdbService>().AddHttpMessageHandler<AuthenticationHandler>();
+        builder.Services.AddHttpClient<IIgdbService, IgdbService>().AddHttpMessageHandler<TwitchAuthenticationHandler>();
 
         // Add Serilog for logging
         builder.Services.AddSerilog();
