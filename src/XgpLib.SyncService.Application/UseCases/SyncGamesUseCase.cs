@@ -18,11 +18,11 @@ public class SyncGamesUseCase(
         var gamesFromApi = await _igdbService.FetchGamesByPlatformAsync([3], cancellationToken);
         if (gamesFromApi is null || !gamesFromApi.Any())
         {
-            _logger.LogWarning("No games found in the API response. Skipping synchronization.");
+            _logger.LogWarning("No games found in the API response");
             return;
         }
 
-        _logger.LogInformation("Fetched {Count} games from IGDB API.", gamesFromApi.Count());
+        _logger.LogInformation("Fetched {Count} games from IGDB API", gamesFromApi.Count());
 
         var games = gamesFromApi.Select(gameDto => new Game
         {
@@ -34,7 +34,7 @@ public class SyncGamesUseCase(
         try
         {
             await _gameRepository.AddOrUpdateRangeAsync(games, cancellationToken);
-            _logger.LogInformation("Successfully synchronized {Count} games to the database.", gamesFromApi.Count());
+            _logger.LogInformation("Successfully synchronized {Count} games to the database", gamesFromApi.Count());
         }
         catch (Exception ex)
         {

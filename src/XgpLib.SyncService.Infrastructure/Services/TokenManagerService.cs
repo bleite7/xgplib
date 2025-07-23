@@ -37,7 +37,7 @@ public class TokenManagerService(
             var tokenResponse = await response.Content.ReadFromJsonAsync<TwitchTokenResponse>(cancellationToken);
             if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.AccessToken))
             {
-                throw new InvalidOperationException("Failed to retrieve a valid access token from Twitch.");
+                throw new InvalidOperationException("Failed to retrieve a valid access token from Twitch");
             }
 
             TokenCache.SetToken(tokenResponse.AccessToken, tokenResponse.ExpiresIn);
