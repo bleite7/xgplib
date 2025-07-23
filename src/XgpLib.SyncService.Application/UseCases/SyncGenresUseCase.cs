@@ -13,12 +13,16 @@ public class SyncGenresUseCase(
 
     public async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Fetching genres from IGDB API.");
+
         var genresFromApi = await _igdbService.FetchGenresAsync(cancellationToken);
         if (genresFromApi is null || !genresFromApi.Any())
         {
             _logger.LogWarning("No genres found in the API response. Skipping synchronization.");
             return;
         }
+
+        _logger.LogInformation("Fetched {Count} genres from IGDB API.", genresFromApi.Count());
 
         var genres = genresFromApi.Select(genreDto => new Genre
         {
@@ -28,6 +32,15 @@ public class SyncGenresUseCase(
             Data = JsonSerializer.Serialize(genreDto),
         });
 
-        await _genreRepository.AddOrUpdateRangeAsync(genres, cancellationToken);
+        try
+        {
+            await _genreRepository.AddOrUpdateRangeAsync(genres, cancellationToken);
+            _logger.LogInformation("Successfully synchronized {Count} genres to the database.", genresFromApi.Count());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to synchronize genres to the database: {Message}", ex.Message);
+            throw;
+        }
     }
 }
