@@ -33,8 +33,16 @@ public class Program
         // Register HTTP clients
         builder.Services.AddScoped<IGameRepository, GameRepository>();
         builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-        builder.Services.AddHttpClient<ITokenManagerService, TokenManagerService>();
-        builder.Services.AddHttpClient<IIgdbService, IgdbService>().AddHttpMessageHandler<TwitchAuthenticationHandler>();
+        builder.Services.AddHttpClient<ITokenManagerService, TokenManagerService>("TokenManagerServiceApi");
+
+        // Register the IGDB service with the base URL from configuration
+        var igdbServiceApiBaseUrl = builder.Configuration.GetValue<string>("Igdb:BaseUrl") ?? "";
+        builder.Services
+            .AddHttpClient<IIgdbService, IgdbService>("IgdbServiceApi", options =>
+            {
+                options.BaseAddress = new Uri(igdbServiceApiBaseUrl);
+            })
+            .AddHttpMessageHandler<TwitchAuthenticationHandler>();
 
         // Add Serilog for logging
         builder.Services.AddSerilog();

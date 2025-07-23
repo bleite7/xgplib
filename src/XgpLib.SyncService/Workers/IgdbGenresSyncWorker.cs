@@ -11,7 +11,7 @@ public class IgdbGenresSyncWorker(
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var startTime = DateTimeOffset.Now;
+            var startTime = DateTimeOffset.UtcNow;
             _logger.LogInformation("Starting genres synchronization at {Time}", startTime);
 
             // Using the service provider to create a scope
@@ -27,9 +27,8 @@ public class IgdbGenresSyncWorker(
                     _logger.LogError(ex, "An error occurred while synchronizing genres: {Message}", ex.Message);
                 }
             }
-            _logger.LogInformation("Genres synchronization completed at {Time} in {Elapsed}", DateTimeOffset.Now, (DateTimeOffset.Now - startTime));
+            _logger.LogInformation("Genres synchronization completed at {Time} in {Elapsed}", DateTimeOffset.UtcNow, (DateTimeOffset.UtcNow - startTime));
             await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
         }
-
     }
 }

@@ -11,7 +11,7 @@ public class IgdbGamesSyncWorker(
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var startTime = DateTimeOffset.Now;
+            var startTime = DateTimeOffset.UtcNow;
             _logger.LogInformation("Starting games synchronization at {Time}", startTime);
 
             using (var scope = _serviceProvider.CreateScope())
@@ -20,17 +20,16 @@ public class IgdbGamesSyncWorker(
                 try
                 {
                     await syncGamesUseCase.ExecuteAsync(cancellationToken);
-                    _logger.LogInformation("Games synchronization finished successfully at {Time}", DateTimeOffset.Now);
+                    _logger.LogInformation("Games synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "An error occurred while synchronizing games: {Message}", ex.Message);
                 }
             }
-            var elapsed = DateTimeOffset.Now - startTime;
-            _logger.LogInformation("Games synchronization completed at {Time} (Elapsed: {Elapsed})", DateTimeOffset.Now, elapsed);
+            var elapsed = DateTimeOffset.UtcNow - startTime;
+            _logger.LogInformation("Games synchronization completed at {Time} (Elapsed: {Elapsed})", DateTimeOffset.UtcNow, elapsed);
             await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
         }
-
     }
 }

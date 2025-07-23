@@ -3,21 +3,9 @@ using System.Text;
 
 namespace XgpLib.SyncService.Infrastructure.Services;
 
-public class IgdbService : IIgdbService
+public class IgdbService(HttpClient httpClient) : IIgdbService
 {
-    private readonly HttpClient _httpClient;
-
-    public IgdbService(HttpClient httpClient, IConfiguration configuration)
-    {
-        _httpClient = httpClient;
-
-        var baseUrl = configuration["Igdb:BaseUrl"];
-        if (string.IsNullOrWhiteSpace(baseUrl))
-        {
-            throw new ArgumentException("The configuration value for 'Igdb:BaseUrl' cannot be null or empty.", nameof(configuration));
-        }
-        _httpClient.BaseAddress = new Uri(baseUrl);
-    }
+    private readonly HttpClient _httpClient = httpClient;
 
     public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
     public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformAsync(IEnumerable<int> platformIds, CancellationToken cancellationToken)
