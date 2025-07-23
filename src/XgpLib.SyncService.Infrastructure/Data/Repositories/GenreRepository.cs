@@ -24,9 +24,4 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
         }
         await _context.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task<IEnumerable<Genre>> GetAllAsync(CancellationToken cancellation)
-    {
-        return await _context.Genres.ToListAsync(cancellation);
-    }
 }

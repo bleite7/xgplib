@@ -24,9 +24,4 @@ public class GameRepository(XgpLibDbContext context) : IGameRepository
         }
         await _context.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task<IEnumerable<Game>> GetAllAsync(CancellationToken cancellation)
-    {
-        return await _context.Games.ToListAsync(cancellation);
-    }
 }
