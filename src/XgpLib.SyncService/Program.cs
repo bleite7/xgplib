@@ -48,8 +48,7 @@ public class Program
         builder.Services.AddSerilog();
 
         // Register the synchronization workers
-        builder.Services.AddHostedService<IgdbGamesSyncWorker>();
-        builder.Services.AddHostedService<IgdbGenresSyncWorker>();
+        builder.Services.AddHostedService<IgdbSyncWorker>();
 
         // Run the application
         var host = builder.Build();
