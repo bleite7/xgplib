@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace XgpLib.SyncService.Infrastructure.Data.Repositories;
+﻿namespace XgpLib.SyncService.Infrastructure.Data.Repositories;
 
 public class GameRepository(XgpLibDbContext context) : IGameRepository
 {
