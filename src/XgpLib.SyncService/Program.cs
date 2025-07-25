@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using XgpLib.SyncService.CrossCutting;
 using XgpLib.SyncService.Infrastructure.Data;
 using XgpLib.SyncService.Infrastructure.Data.Repositories;
 
@@ -19,30 +20,8 @@ public class Program
         // This is the entry point for the .NET application
         var builder = Host.CreateApplicationBuilder(args);
 
-        // Create and configure database context
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddDbContext<XgpLibDbContext>(options => options
-            .UseNpgsql(connectionString)
-            .UseSnakeCaseNamingConvention());
-
         // Register services
-        builder.Services.AddScoped<SyncGamesUseCase>();
-        builder.Services.AddScoped<SyncGenresUseCase>();
-        builder.Services.AddScoped<TwitchAuthenticationHandler>();
-
-        // Register HTTP clients
-        builder.Services.AddScoped<IGameRepository, GameRepository>();
-        builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-        builder.Services.AddHttpClient<ITokenManagerService, TokenManagerService>("TokenManagerServiceApi");
-
-        // Register the IGDB service with the base URL from configuration
-        var igdbServiceApiBaseUrl = builder.Configuration.GetValue<string>("Igdb:BaseUrl") ?? "";
-        builder.Services
-            .AddHttpClient<IIgdbService, IgdbService>("IgdbServiceApi", options =>
-            {
-                options.BaseAddress = new Uri(igdbServiceApiBaseUrl);
-            })
-            .AddHttpMessageHandler<TwitchAuthenticationHandler>();
+        builder.Services.AddSyncServiceDependencies(builder.Configuration);
 
         // Add Serilog for logging
         builder.Services.AddSerilog();

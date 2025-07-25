@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.Infrastructure", "src\XgpLib.SyncService.Infrastructure\XgpLib.SyncService.Infrastructure.csproj", "{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.CrossCutting", "src\XgpLib.SyncService.CrossCutting\XgpLib.SyncService.CrossCutting.csproj", "{A5769851-B593-4D79-B583-01224125BFBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5769851-B593-4D79-B583-01224125BFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5769851-B593-4D79-B583-01224125BFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5769851-B593-4D79-B583-01224125BFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5769851-B593-4D79-B583-01224125BFBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B8F4A014-3940-46B9-A396-5B361370C547} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{FFDE3A86-DD8B-43BD-8099-922E0EA924D2} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A5769851-B593-4D79-B583-01224125BFBC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4985B8B7-FF45-4F2C-9ADC-E0D36B9985A9}
