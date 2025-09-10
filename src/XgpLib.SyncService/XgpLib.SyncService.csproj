@@ -12,9 +12,9 @@
 		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\XgpLib.SyncService.Application\XgpLib.SyncService.Application.csproj" />
-	  <ProjectReference Include="..\XgpLib.SyncService.CrossCutting\XgpLib.SyncService.CrossCutting.csproj" />
-	  <ProjectReference Include="..\XgpLib.SyncService.Domain\XgpLib.SyncService.Domain.csproj" />
-	  <ProjectReference Include="..\XgpLib.SyncService.Infrastructure\XgpLib.SyncService.Infrastructure.csproj" />
+		<ProjectReference Include="..\XgpLib.SyncService.Application\XgpLib.SyncService.Application.csproj" />
+		<ProjectReference Include="..\XgpLib.SyncService.CrossCutting\XgpLib.SyncService.CrossCutting.csproj" />
+		<ProjectReference Include="..\XgpLib.SyncService.Domain\XgpLib.SyncService.Domain.csproj" />
+		<ProjectReference Include="..\XgpLib.SyncService.Infrastructure\XgpLib.SyncService.Infrastructure.csproj" />
 	</ItemGroup>
 </Project>
