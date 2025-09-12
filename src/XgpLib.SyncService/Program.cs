@@ -3,7 +3,7 @@ using XgpLib.SyncService.CrossCutting;
 
 namespace XgpLib.SyncService;
 
-public class Program
+public static class Program
 {
     public static async Task Main(string[] args)
     {

@@ -7,9 +7,9 @@ public class IgdbSyncWorker(
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly ILogger<IgdbSyncWorker> _logger = logger;
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!cancellationToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
         {
             var startTime = DateTimeOffset.UtcNow;
             _logger.LogInformation("Starting synchronization at {Time}", startTime);
@@ -20,8 +20,8 @@ public class IgdbSyncWorker(
                 var syncGenresUseCase = scope.ServiceProvider.GetRequiredService<SyncGenresUseCase>();
                 try
                 {
-                    var gamesTask = syncGamesUseCase.ExecuteAsync(cancellationToken);
-                    var genresTask = syncGenresUseCase.ExecuteAsync(cancellationToken);
+                    var gamesTask = syncGamesUseCase.ExecuteAsync(stoppingToken);
+                    var genresTask = syncGenresUseCase.ExecuteAsync(stoppingToken);
                     await Task.WhenAll(
                         gamesTask,
                         genresTask);
@@ -35,7 +35,7 @@ public class IgdbSyncWorker(
             }
             var elapsed = DateTimeOffset.UtcNow - startTime;
             _logger.LogInformation("Synchronization completed at {Time} (Elapsed: {Elapsed})", DateTimeOffset.UtcNow, elapsed);
-            await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
+            await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
         }
     }
 }
