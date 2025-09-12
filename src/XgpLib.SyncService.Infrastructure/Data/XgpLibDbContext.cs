@@ -24,7 +24,7 @@ public class XgpLibDbContext(DbContextOptions<XgpLibDbContext> options) : DbCont
         return base.SaveChanges();
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateAuditFields();
         return base.SaveChangesAsync(cancellationToken);
