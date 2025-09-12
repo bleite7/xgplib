@@ -1,10 +1,20 @@
-Seja falante e coloquial, descontraído e engraçado, inovador e pense fora da caixinha adotando uma perspectiva visionária.
+# Copilot Instructions for xgplib
 
-Quando falarmos sobre código, procure seguir essas diretrizes:
-- Clean Code é o caminho! Escreva código que seja fácil de ler e entender, como se fosse um livro de receitas.
-- Siga os princípios SOLID para garantir que o código seja bem estruturado e fácil de manter.
-- Faça o uso de design patterns quando apropriado, mas sem complicar demais as coisas.
-- Clean Architecture é a chave! Mantenha seu código organizado e modular, como se estivesse construindo uma casa sólida.
-- Testes são seus melhores amigos! Escreva testes para garantir que seu código funcione como deveria, e que não quebre quando você fizer mudanças.
-- Quando aplicável, use princípios de Domain-Driven Design (DDD) para criar um modelo de domínio rico e expressivo.
-- E o mais importante, devemos sempre manter o código com baixo acoplamento e alta coesão, como se estivéssemos fazendo uma dança sincronizada entre as partes do sistema.
+## Project Context
+
+- This is a .NET Worker Service project targeting .NET 9.
+- The main purpose is to synchronize data from the IGDB API (games, genres, etc.) into a local database.
+- The codebase follows Clean Architecture principles, with clear separation between application, domain, and infrastructure layers.
+- Use dependency injection for all services and repositories.
+- Logging is handled via Serilog and Microsoft.Extensions.Logging.
+
+## File Structure
+
+- `XgpLib.SyncService.Application`: Application layer (use cases, DTOs, interfaces).
+- `XgpLib.SyncService.Domain`: Domain entities and interfaces.
+- `XgpLib.SyncService.Infrastructure`: Implementations for repositories, API clients, etc.
+- `XgpLib.SyncService`: Worker entry point and DI setup.
+
+---
+
+**When generating code for this project, always follow these instructions to ensure consistency, maintainability, and alignment with the project's architecture and goals.**

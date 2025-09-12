@@ -12,7 +12,7 @@ using XgpLib.SyncService.Infrastructure.Data;
 namespace XgpLib.SyncService.Infrastructure.Migrations
 {
     [DbContext(typeof(XgpLibDbContext))]
-    [Migration("20250720183319_InitialCreate")]
+    [Migration("20250912033738_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

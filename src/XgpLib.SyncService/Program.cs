@@ -1,8 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 using XgpLib.SyncService.CrossCutting;
-using XgpLib.SyncService.Infrastructure.Data;
-using XgpLib.SyncService.Infrastructure.Data.Repositories;
 
 namespace XgpLib.SyncService;
 
