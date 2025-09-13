@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace XgpLib.SyncService.Infrastructure.Data;
 
@@ -34,17 +35,20 @@ public class XgpLibDbContext(DbContextOptions<XgpLibDbContext> options) : DbCont
     {
         var entries = ChangeTracker.Entries<AuditableEntity>();
         var utcNow = DateTimeOffset.UtcNow;
+        var modifiedBy = MethodBase.GetCurrentMethod()?.DeclaringType?.Namespace;
 
         foreach (var entry in entries)
         {
             if (entry.State == EntityState.Added)
             {
+                entry.Entity.LastModifiedBy = modifiedBy;
                 entry.Entity.CreatedAt = utcNow;
                 entry.Entity.ModifiedAt = utcNow;
             }
             else if (entry.State == EntityState.Modified)
             {
                 entry.Property(e => e.CreatedAt).IsModified = false;
+                entry.Entity.LastModifiedBy = modifiedBy;
                 entry.Entity.ModifiedAt = utcNow;
             }
         }
