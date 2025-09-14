@@ -28,6 +28,7 @@ public class SyncGamesUseCase(
         {
             Id = gameDto.Id,
             Name = gameDto.Name,
+            Genres = gameDto.Genres,
             Data = JsonSerializer.Serialize(gameDto),
         });
 
