@@ -14,7 +14,7 @@ public class XgpLibDbContextFactory : IDesignTimeDbContextFactory<XgpLibDbContex
 
         var optionsBuilder = new DbContextOptionsBuilder<XgpLibDbContext>();
         optionsBuilder
-            .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+            .UseNpgsql(configuration.GetConnectionString("XgpLibPostgresConnection"))
             .UseSnakeCaseNamingConvention();
 
         return new XgpLibDbContext(optionsBuilder.Options);

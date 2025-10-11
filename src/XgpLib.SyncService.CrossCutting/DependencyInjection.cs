@@ -18,7 +18,7 @@ public static class DependencyInjection
     {
         // DbContext
         services.AddDbContext<XgpLibDbContext>(options => options.UseNpgsql(configuration
-            .GetConnectionString("DefaultConnection"))
+            .GetConnectionString("XgpLibPostgres"))
             .UseSnakeCaseNamingConvention());
 
         // Application UseCases
