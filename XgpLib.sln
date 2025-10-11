@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService", "src\XgpLib.SyncService\XgpLib.SyncService.csproj", "{6BE66D7C-10F1-52F0-4AE0-9690CD58A149}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.WorkerServices", "src\XgpLib.SyncService\XgpLib.SyncService.WorkerServices.csproj", "{6BE66D7C-10F1-52F0-4AE0-9690CD58A149}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XgpLib.SyncService.Domain", "src\XgpLib.SyncService.Domain\XgpLib.SyncService.Domain.csproj", "{97EBCCE9-78B0-4460-ABEE-CCAD46F4958A}"
 EndProject

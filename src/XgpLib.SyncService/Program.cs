@@ -1,7 +1,7 @@
 using Serilog;
 using XgpLib.SyncService.CrossCutting;
 
-namespace XgpLib.SyncService;
+namespace XgpLib.SyncService.WorkerServices;
 
 public static class Program
 {

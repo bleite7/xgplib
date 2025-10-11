@@ -1,4 +1,4 @@
-namespace XgpLib.SyncService.Workers;
+namespace XgpLib.SyncService.WorkerServices.Workers;
 
 public class IgdbSyncWorker(
     IServiceProvider serviceProvider,
