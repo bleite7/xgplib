@@ -11,7 +11,7 @@ public class SyncGenresUseCase(
     private readonly IGenreRepository _genreRepository = genreRepository;
     private readonly ILogger<SyncGenresUseCase> _logger = logger;
 
-    public async Task ExecuteAsync(CancellationToken cancellationToken)
+    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Fetching genres from IGDB API");
 

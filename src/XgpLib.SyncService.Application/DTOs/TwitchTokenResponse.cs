@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XgpLib.SyncService.Application.DTOs;
+namespace XgpLib.SyncService.Infrastructure.Services;
 
-public class TwitchTokenResponse
+public record TwitchTokenResponse
 {
     [JsonPropertyName("access_token")]
     public string AccessToken { get; set; } = string.Empty;

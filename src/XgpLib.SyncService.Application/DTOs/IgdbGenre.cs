@@ -2,7 +2,7 @@
 
 namespace XgpLib.SyncService.Application.DTOs;
 
-public class IgdbGenre
+public record IgdbGenre
 {
     [JsonPropertyName("id")]
     public long Id { get; set; }

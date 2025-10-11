@@ -11,6 +11,18 @@ services:
             POSTGRES_DB: xgplib
             POSTGRES_USER: ademir
             POSTGRES_PASSWORD: 1234@4321
+    rabbitmq:
+        image: rabbitmq:4-management
+        container_name: rabbitmq
+        restart: always
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        environment:
+            RABBITMQ_DEFAULT_USER: ademir
+            RABBITMQ_DEFAULT_PASS: 1234@4321
 
 volumes:
     pg_data:
+    rabbitmq_data:
+    rabbitmq_log:

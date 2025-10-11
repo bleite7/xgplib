@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using XgpLib.SyncService.Application.DTOs;
+using XgpLib.SyncService.Application.Interfaces.Services;
 
 namespace XgpLib.SyncService.Infrastructure.Services;
 
@@ -7,8 +9,8 @@ public class IgdbService(HttpClient httpClient) : IIgdbService
 {
     private readonly HttpClient _httpClient = httpClient;
 
-    public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
-    public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformAsync(IEnumerable<int> platformIds, CancellationToken cancellationToken)
+    public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken = default) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
+    public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformAsync(IEnumerable<int> platformIds, CancellationToken cancellationToken = default)
     {
         var platformsFilter = string.Join(",", platformIds);
         var whereClause = $"platforms = ({platformsFilter})";
@@ -17,7 +19,7 @@ public class IgdbService(HttpClient httpClient) : IIgdbService
         return FetchAllPagedAsync<IgdbGame>("games", fields, whereClause, cancellationToken);
     }
 
-    private async Task<IEnumerable<T>> FetchAllPagedAsync<T>(string endpoint, string fields, string? whereClause, CancellationToken cancellationToken)
+    private async Task<IEnumerable<T>> FetchAllPagedAsync<T>(string endpoint, string fields, string? whereClause, CancellationToken cancellationToken = default)
     {
         const int limit = 500;
         int offset = 0;

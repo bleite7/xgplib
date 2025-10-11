@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XgpLib.SyncService.Application.Interfaces.Services;
 using XgpLib.SyncService.Application.UseCases;
 using XgpLib.SyncService.Domain.Interfaces.Repositories;
+using XgpLib.SyncService.Infrastructure.Configuration;
 using XgpLib.SyncService.Infrastructure.Data;
 using XgpLib.SyncService.Infrastructure.Data.Repositories;
 using XgpLib.SyncService.Infrastructure.HttpHandlers;
@@ -20,6 +21,11 @@ public static class DependencyInjection
         services.AddDbContext<XgpLibDbContext>(options => options.UseNpgsql(configuration
             .GetConnectionString("XgpLibPostgres"))
             .UseSnakeCaseNamingConvention());
+
+        // Message Broker - RabbitMQ
+        services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMq"));
+        services.AddScoped<IMessageBrokerService, RabbitMqService>();
+        services.AddScoped<PublishMessageUseCase>();
 
         // Application UseCases
         services.AddScoped<SyncGamesUseCase>();

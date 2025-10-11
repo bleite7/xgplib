@@ -6,7 +6,7 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
 
     public async Task AddOrUpdateRangeAsync(
         IEnumerable<Genre> genres,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         foreach (var genre in genres)
         {

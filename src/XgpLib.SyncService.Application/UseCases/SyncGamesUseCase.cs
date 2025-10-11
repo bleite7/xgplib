@@ -3,15 +3,15 @@
 namespace XgpLib.SyncService.Application.UseCases;
 
 public class SyncGamesUseCase(
+    ILogger<SyncGamesUseCase> logger,
     IIgdbService igdbService,
-    IGameRepository gameRepository,
-    ILogger<SyncGamesUseCase> logger)
+    IGameRepository gameRepository)
 {
+    private readonly ILogger<SyncGamesUseCase> _logger = logger;
     private readonly IIgdbService _igdbService = igdbService;
     private readonly IGameRepository _gameRepository = gameRepository;
-    private readonly ILogger<SyncGamesUseCase> _logger = logger;
 
-    public async Task ExecuteAsync(CancellationToken cancellationToken)
+    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Fetching games from IGDB API for platform(s): {PlatformIds}", "[3]");
 
