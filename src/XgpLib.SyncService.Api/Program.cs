@@ -1,5 +1,4 @@
 using Serilog;
-using XgpLib.SyncService.CrossCutting;
 
 // Configure Serilog for logging
 Log.Logger = new LoggerConfiguration()
@@ -22,7 +21,6 @@ builder.Services.AddSerilog();
 builder.Services.AddOpenApiDocument(config =>
 {
     config.Title = "XgpLib.SyncService.Api";
-    config.Version = "v1.0";
 });
 
 var app = builder.Build();

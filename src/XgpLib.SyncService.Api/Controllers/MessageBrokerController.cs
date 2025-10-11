@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using XgpLib.SyncService.Application.DTOs;
-using XgpLib.SyncService.Application.UseCases;
 
 namespace XgpLib.SyncService.Api.Controllers;
 
