@@ -1,13 +1,15 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.Extensions.Options;
+using System.Net.Http.Json;
+using XgpLib.SyncService.Infrastructure.Configuration;
 
 namespace XgpLib.SyncService.Infrastructure.Services;
 
 public class TokenManagerService(
     HttpClient httpClient,
-    IConfiguration configuration) : ITokenManagerService
+    IOptions<IgdbConfiguration> configuration) : ITokenManagerService
 {
     private readonly HttpClient _httpClient = httpClient;
-    private readonly IConfiguration _configuration = configuration;
+    private readonly IgdbConfiguration _configuration = configuration.Value;
     private static readonly SemaphoreSlim Semaphore = new(1, 1);
 
     public async Task<string> GetValidTokenAsync(CancellationToken cancellationToken)
@@ -25,9 +27,9 @@ public class TokenManagerService(
                 return TokenCache.GetToken();
             }
 
-            var clientId = _configuration["Igdb:ClientId"];
-            var clientSecret = _configuration["Igdb:ClientSecret"];
-            var authUrl = _configuration["Igdb:AuthUrl"];
+            var clientId = _configuration.ClientId;
+            var clientSecret = _configuration.ClientSecret;
+            var authUrl = _configuration.AuthUrl;
 
             var requestUrl = $"{authUrl}?client_id={clientId}&client_secret={clientSecret}&grant_type=client_credentials";
             var response = await _httpClient.PostAsync(requestUrl, null, cancellationToken);

@@ -28,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<PublishMessageUseCase>();
 
         // Application UseCases
+        services.Configure<IgdbConfiguration>(configuration.GetSection("Igdb"));
         services.AddScoped<SyncGamesUseCase>();
         services.AddScoped<SyncGenresUseCase>();
 
