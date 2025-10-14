@@ -52,11 +52,11 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
                 body: body,
                 cancellationToken: cancellationToken);
 
-            _logger.LogDebug("Message published to topic {Topic}", topic);
+            _logger.LogInformation("Message {Message} published to topic {Topic}", message, topic);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to publish message to topic {Topic}", topic);
+            _logger.LogError(ex, "Failed to publish message {Message} to topic {Topic}", message, topic);
             throw;
         }
     }
