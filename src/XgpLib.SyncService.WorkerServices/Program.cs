@@ -9,10 +9,7 @@ var builder = Host.CreateApplicationBuilder(args);
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
-    .Enrich.WithMachineName()
-    .WriteTo.Console(outputTemplate:
-        "[{Timestamp:HH:mm:ss} {Level:u3}] {Properties:j} " +
-        "{Message:lj}{NewLine}{Exception}")
+    .WriteTo.Console()
     .CreateLogger();
 
 // Add Serilog for logging

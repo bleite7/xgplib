@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using XgpLib.SyncService.Application.Interfaces.Services;
 using XgpLib.SyncService.Application.UseCases;
 using XgpLib.SyncService.Domain.Interfaces.Repositories;
@@ -13,8 +14,17 @@ using XgpLib.SyncService.Infrastructure.Services;
 
 namespace XgpLib.SyncService.CrossCutting;
 
+/// <summary>
+/// Injects all dependencies required by the Sync Service
+/// </summary>
 public static class DependencyInjection
 {
+    /// <summary>
+    /// Adds all dependencies required by the Sync Service
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    /// <returns></returns>
     public static IServiceCollection AddSyncServiceDependencies(this IServiceCollection services, IConfiguration configuration)
     {
         // DbContext
