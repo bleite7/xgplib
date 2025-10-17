@@ -1,21 +1,25 @@
 using Serilog;
 using XgpLib.SyncService.CrossCutting;
 
-// Configure Serilog for logging
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .CreateLogger();
-
 // Create the application builder
 // This is the entry point for the .NET application
 var builder = Host.CreateApplicationBuilder(args);
 
-// Register services
-builder.Services.AddSyncServiceDependencies(builder.Configuration);
+// Configure Serilog for logging
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .WriteTo.Console(outputTemplate:
+        "[{Timestamp:HH:mm:ss} {Level:u3}] {Properties:j} " +
+        "{Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
 
 // Add Serilog for logging
 builder.Services.AddSerilog();
+
+// Register services
+builder.Services.AddSyncServiceDependencies(builder.Configuration);
 
 // Register the synchronization workers
 builder.Services.AddHostedService<IgdbGenresSyncWorker>();

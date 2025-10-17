@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 using System.Text;
 using XgpLib.SyncService.Infrastructure.Configuration;
 
@@ -167,8 +166,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
             };
 
             var connection = await factory.CreateConnectionAsync();
-            _logger.LogInformation("RabbitMQ connection established to {HostName}:{Port}",
-                _configuration.HostName, _configuration.Port);
+            _logger.LogInformation("RabbitMQ connection established to {HostName}:{Port}", _configuration.HostName, _configuration.Port);
 
             return connection;
         }

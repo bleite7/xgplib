@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using XgpLib.SyncService.Application.UseCases;
 
 namespace XgpLib.SyncService.Api.Controllers;
 
 /// <summary>
-/// Controller for handling message broker operations
+/// Controller for handling message broker operations (publish and receive messages).
 /// </summary>
-/// <param name="logger">Logger instance</param>
-/// <param name="publishMessageUseCase">Use case for publishing messages</param>
+/// <param name="logger"></param>
+/// <param name="publishMessageUseCase"></param>
+/// <param name="receiveMessagesUseCase"></param>
 [ApiController]
 [Route("api/[controller]")]
 public class MessageBrokerController(
