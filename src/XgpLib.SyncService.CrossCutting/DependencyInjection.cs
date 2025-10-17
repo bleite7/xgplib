@@ -26,6 +26,7 @@ public static class DependencyInjection
         services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMq"));
         services.AddScoped<IMessageBrokerService, RabbitMqService>();
         services.AddScoped<PublishMessageUseCase>();
+        services.AddScoped<ReceiveMessagesUseCase>();
 
         // Application UseCases
         services.Configure<IgdbConfiguration>(configuration.GetSection("Igdb"));

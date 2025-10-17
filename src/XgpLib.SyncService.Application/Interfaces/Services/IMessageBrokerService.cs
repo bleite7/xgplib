@@ -18,8 +18,8 @@ public interface IMessageBrokerService
     /// Receive messages from a specified topic
     /// </summary>
     /// <param name="topic">The topic to receive messages from</param>
-    /// <param name="messageHandler">The function to handle received messages</param>
+    /// <param name="maxMessages">Maximum number of messages to receive</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Task</returns>
-    Task ReceiveMessagesAsync(string topic, Func<string, Task> messageHandler, CancellationToken cancellationToken);
+    /// <returns>List of received messages</returns>
+    Task<List<string>> ReceiveMessagesAsync(string topic, int maxMessages, CancellationToken cancellationToken);
 }
