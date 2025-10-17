@@ -14,6 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddProblemDetails();
 builder.Services.AddSyncServiceDependencies(builder.Configuration);
+
 // Add Serilog for logging
 builder.Services.AddSerilog();
 
