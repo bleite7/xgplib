@@ -2,6 +2,12 @@
 
 namespace XgpLib.SyncService.Application.UseCases;
 
+/// <summary>
+/// Use case to synchronize games from IGDB API to the local database.
+/// </summary>
+/// <param name="logger">Logger for the use case</param>
+/// <param name="igdbService">Service to interact with IGDB API</param>
+/// <param name="gameRepository">Repository to manage game data</param>
 public class SyncGamesUseCase(
     ILogger<SyncGamesUseCase> logger,
     IIgdbService igdbService,
@@ -11,6 +17,11 @@ public class SyncGamesUseCase(
     private readonly IIgdbService _igdbService = igdbService;
     private readonly IGameRepository _gameRepository = gameRepository;
 
+    /// <summary>
+    /// Sync games from IGDB API to the local database.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Task</returns>
     public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Fetching games from IGDB API for platform(s): {PlatformIds}", "[3]");

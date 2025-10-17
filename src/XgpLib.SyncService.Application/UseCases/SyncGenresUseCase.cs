@@ -2,6 +2,12 @@
 
 namespace XgpLib.SyncService.Application.UseCases;
 
+/// <summary>
+/// Use case to synchronize genres from IGDB API to the local database.
+/// </summary>
+/// <param name="igdbService">Service to interact with IGDB API</param>
+/// <param name="genreRepository">Repository to manage genre data</param>
+/// <param name="logger">Logger for the use case</param>
 public class SyncGenresUseCase(
     IIgdbService igdbService,
     IGenreRepository genreRepository,
@@ -11,6 +17,11 @@ public class SyncGenresUseCase(
     private readonly IGenreRepository _genreRepository = genreRepository;
     private readonly ILogger<SyncGenresUseCase> _logger = logger;
 
+    /// <summary>
+    /// Sync genres from IGDB API to the local database.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Task</returns>
     public async Task ExecuteAsync(CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Fetching genres from IGDB API");

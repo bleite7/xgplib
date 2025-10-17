@@ -18,6 +18,9 @@ services:
         ports:
             - "5672:5672"
             - "15672:15672"
+        volumes:
+            - rabbitmq_data:/var/lib/rabbitmq
+            - rabbitmq_log:/var/log/rabbitmq
         environment:
             RABBITMQ_DEFAULT_USER: ademir
             RABBITMQ_DEFAULT_PASS: 1234@4321

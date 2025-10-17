@@ -117,6 +117,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
         finally
         {
             _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 
