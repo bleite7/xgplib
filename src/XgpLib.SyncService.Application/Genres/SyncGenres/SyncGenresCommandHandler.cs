@@ -1,7 +1,6 @@
 ﻿using Ardalis.Result;
 using System.Text.Json;
 using XgpLib.SyncService.Application.Abstractions.Messaging;
-using XgpLib.SyncService.Application.Abstractions.Services;
 
 namespace XgpLib.SyncService.Application.Genres.SyncGenres;
 
