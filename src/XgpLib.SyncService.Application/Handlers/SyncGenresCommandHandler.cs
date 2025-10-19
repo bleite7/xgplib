@@ -1,28 +1,19 @@
-﻿using System.Text.Json;
+﻿using MediatR;
+using System.Text.Json;
+using XgpLib.SyncService.Application.Commands;
 
-namespace XgpLib.SyncService.Application.UseCases;
+namespace XgpLib.SyncService.Application.Handlers;
 
-/// <summary>
-/// Use case to synchronize genres from IGDB API to the local database.
-/// </summary>
-/// <param name="igdbService">Service to interact with IGDB API</param>
-/// <param name="genreRepository">Repository to manage genre data</param>
-/// <param name="logger">Logger for the use case</param>
-public class SyncGenresUseCase(
+public class SyncGenresCommandHandler(
+    ILogger<SyncGenresCommandHandler> logger,
     IIgdbService igdbService,
-    IGenreRepository genreRepository,
-    ILogger<SyncGenresUseCase> logger)
+    IGenreRepository genreRepository) : IRequestHandler<SyncGenresCommand, Unit>
 {
+    private readonly ILogger<SyncGenresCommandHandler> _logger = logger;
     private readonly IIgdbService _igdbService = igdbService;
     private readonly IGenreRepository _genreRepository = genreRepository;
-    private readonly ILogger<SyncGenresUseCase> _logger = logger;
 
-    /// <summary>
-    /// Sync genres from IGDB API to the local database.
-    /// </summary>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Task</returns>
-    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
+    public async Task<Unit> Handle(SyncGenresCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Fetching genres from IGDB API");
 
@@ -30,7 +21,7 @@ public class SyncGenresUseCase(
         if (genresFromApi is null || !genresFromApi.Any())
         {
             _logger.LogWarning("No genres found in the API response");
-            return;
+            return Unit.Value;
         }
 
         _logger.LogInformation("Fetched {Count} genres from IGDB API", genresFromApi.Count());
@@ -53,5 +44,7 @@ public class SyncGenresUseCase(
             _logger.LogError(ex, "Failed to synchronize genres to the database: {Message}", ex.Message);
             throw;
         }
+
+        return Unit.Value;
     }
 }

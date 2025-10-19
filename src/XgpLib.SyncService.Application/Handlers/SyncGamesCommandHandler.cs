@@ -1,28 +1,19 @@
-﻿using System.Text.Json;
+﻿using MediatR;
+using System.Text.Json;
+using XgpLib.SyncService.Application.Commands;
 
-namespace XgpLib.SyncService.Application.UseCases;
+namespace XgpLib.SyncService.Application.Handlers;
 
-/// <summary>
-/// Use case to synchronize games from IGDB API to the local database.
-/// </summary>
-/// <param name="logger">Logger for the use case</param>
-/// <param name="igdbService">Service to interact with IGDB API</param>
-/// <param name="gameRepository">Repository to manage game data</param>
-public class SyncGamesUseCase(
-    ILogger<SyncGamesUseCase> logger,
+public class SyncGamesCommandHandler(
+    ILogger<SyncGamesCommandHandler> logger,
     IIgdbService igdbService,
-    IGameRepository gameRepository)
+    IGameRepository gameRepository) : IRequestHandler<SyncGamesCommand, Unit>
 {
-    private readonly ILogger<SyncGamesUseCase> _logger = logger;
+    private readonly ILogger<SyncGamesCommandHandler> _logger = logger;
     private readonly IIgdbService _igdbService = igdbService;
     private readonly IGameRepository _gameRepository = gameRepository;
 
-    /// <summary>
-    /// Sync games from IGDB API to the local database.
-    /// </summary>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Task</returns>
-    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
+    public async Task<Unit> Handle(SyncGamesCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Fetching games from IGDB API for platform(s): {PlatformIds}", "[3]");
 
@@ -30,7 +21,7 @@ public class SyncGamesUseCase(
         if (gamesFromApi is null || !gamesFromApi.Any())
         {
             _logger.LogWarning("No games found in the API response");
-            return;
+            return Unit.Value;
         }
 
         _logger.LogInformation("Fetched {Count} games from IGDB API", gamesFromApi.Count());
@@ -53,5 +44,7 @@ public class SyncGamesUseCase(
             _logger.LogError(ex, "Failed to synchronize games to the database: {Message}", ex.Message);
             throw;
         }
+
+        return Unit.Value;
     }
 }
