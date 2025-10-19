@@ -60,6 +60,16 @@ public class MessageBrokerController(
         [FromQuery] int maxMessages = 10,
         CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(topic))
+        {
+            return Problem(
+                title: "Invalid Topic",
+                detail: "The provided topic must not be null or empty.",
+                statusCode: StatusCodes.Status400BadRequest,
+                instance: Request.Path
+            );
+        }
+
         try
         {
             var request = new ReceiveMessagesRequest(topic, maxMessages);

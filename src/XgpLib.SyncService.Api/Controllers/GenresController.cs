@@ -24,6 +24,16 @@ public class GenresController(
     [HttpGet("{genreId}")]
     public async Task<IActionResult> GetGenreById([FromRoute] long genreId, CancellationToken cancellationToken)
     {
+        if (genreId <= 0)
+        {
+            return Problem(
+                title: "Invalid Genre ID",
+                detail: "The provided genre ID must be a positive integer.",
+                statusCode: StatusCodes.Status400BadRequest,
+                instance: Request.Path
+            );
+        }
+
         try
         {
             var query = new GetGenreByIdQuery(genreId);
@@ -35,9 +45,9 @@ public class GenresController(
         {
             logger.LogError(ex, "Error occurred while retrieving genre with ID {GenreId}", genreId);
             return Problem(
-                title: "Bad Request",
+                title: "Internal Server Error",
                 detail: $"An error occurred while processing your request: {ex.Message}",
-                statusCode: StatusCodes.Status400BadRequest,
+                statusCode: StatusCodes.Status500InternalServerError,
                 instance: Request.Path
             );
         }
