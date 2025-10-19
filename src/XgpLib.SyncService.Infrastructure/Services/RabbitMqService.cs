@@ -32,14 +32,51 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="channel"></param>
+    /// <param name="queueName"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    private async Task DeclareQueueWithDlqAsync(
+        IChannel channel,
+        string queueName,
+        CancellationToken cancellationToken)
+    {
+        var dlqName = $"{queueName}.dlq";
+
+        await channel.QueueDeclareAsync(
+            queue: dlqName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null,
+            cancellationToken: cancellationToken);
+
+        var arguments = new Dictionary<string, object>
+        {
+            { "x-dead-letter-exchange", "" }, // exchange padrão
+            { "x-dead-letter-routing-key", dlqName }
+        };
+
+        await channel.QueueDeclareAsync(
+            queue: queueName,
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: arguments,
+            cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
     /// Publish a message to a specified topic
     /// </summary>
-    /// <param name="topic">The topic to publish the message to</param>
+    /// <param name="queue">The queue to publish the message to</param>
     /// <param name="message">The message to publish</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Task</returns>
     public async Task PublishMessageAsync(
-        string topic,
+        string queue,
         string message,
         CancellationToken cancellationToken = default)
     {
@@ -48,13 +85,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
             var connection = await _connectionLazy.Value;
             using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
 
-            await channel.QueueDeclareAsync(
-                queue: topic,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null,
-                cancellationToken: cancellationToken);
+            await DeclareQueueWithDlqAsync(channel, queue, cancellationToken);
 
             var body = Encoding.UTF8.GetBytes(message);
             var properties = new BasicProperties
@@ -65,17 +96,17 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
 
             await channel.BasicPublishAsync(
                 exchange: "",
-                routingKey: topic,
+                routingKey: queue,
                 mandatory: false,
                 basicProperties: properties,
                 body: body,
                 cancellationToken: cancellationToken);
 
-            _logger.LogInformation("Message {Message} published to topic {Topic}", message, topic);
+            _logger.LogInformation("Message {Message} published to queue {Queue}", message, queue);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to publish message {Message} to topic {Topic}", message, topic);
+            _logger.LogError(ex, "Failed to publish message {Message} to queue {Queue}", message, queue);
             throw;
         }
     }
