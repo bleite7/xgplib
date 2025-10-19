@@ -15,9 +15,6 @@ public class GenresController(
     ILogger<GenresController> logger,
     IQueryHandler<GetGenreByIdQuery, GenreResponse> getGenreByIdCommandHandler) : ControllerBase
 {
-    private readonly ILogger<GenresController> _logger = logger;
-    private readonly IQueryHandler<GetGenreByIdQuery, GenreResponse> getGenreByIdCommandHandler = getGenreByIdCommandHandler;
-
     /// <summary>
     /// 
     /// </summary>
@@ -36,8 +33,13 @@ public class GenresController(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while retrieving genre with ID {GenreId}", genreId);
-            return StatusCode(500, "An error occurred while processing your request.");
+            logger.LogError(ex, "Error occurred while retrieving genre with ID {GenreId}", genreId);
+            return Problem(
+                title: "Bad Request",
+                detail: $"An error occurred while processing your request: {ex.Message}",
+                statusCode: StatusCodes.Status400BadRequest,
+                instance: Request.Path
+            );
         }
     }
 }

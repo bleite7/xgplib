@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using XgpLib.SyncService.Application.Abstractions.Data;
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.Abstractions.Services;
 using XgpLib.SyncService.Application.Games.Commands.SyncGames;
@@ -43,6 +44,7 @@ public static class DependencyInjection
 
         // Application UseCases
         services.Configure<IgdbConfiguration>(configuration.GetSection("Igdb"));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICommandHandler<SyncGamesCommand>, SyncGamesCommandHandler>();
         services.AddScoped<ICommandHandler<SyncGenresCommand>, SyncGenresCommandHandler>();
         services.AddScoped<IQueryHandler<GetGenreByIdQuery, GenreResponse>, GetGenreByIdQueryResponseHandler>();

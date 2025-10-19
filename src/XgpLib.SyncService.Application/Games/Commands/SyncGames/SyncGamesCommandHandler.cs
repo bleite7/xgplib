@@ -1,6 +1,6 @@
 ﻿using Ardalis.Result;
 using System.Text.Json;
-using XgpLib.SyncService.Application.Abstractions.Messaging;
+using XgpLib.SyncService.Application.Abstractions.Data;
 
 namespace XgpLib.SyncService.Application.Games.Commands.SyncGames;
 
@@ -10,10 +10,12 @@ namespace XgpLib.SyncService.Application.Games.Commands.SyncGames;
 /// <param name="logger"></param>
 /// <param name="igdbService"></param>
 /// <param name="gameRepository"></param>
+/// <param name="unitOfWork"></param>
 public sealed class SyncGamesCommandHandler(
     ILogger<SyncGamesCommandHandler> logger,
     IIgdbService igdbService,
-    IGameRepository gameRepository) : ICommandHandler<SyncGamesCommand>
+    IGameRepository gameRepository,
+    IUnitOfWork unitOfWork) : ICommandHandler<SyncGamesCommand>
 {
     /// <summary>
     /// 
@@ -45,6 +47,7 @@ public sealed class SyncGamesCommandHandler(
         try
         {
             await gameRepository.AddOrUpdateRangeAsync(games, cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
             logger.LogInformation("Successfully synchronized {Count} games to the database", gamesFromApi.Count());
         }
         catch (Exception ex)

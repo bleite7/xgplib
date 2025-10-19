@@ -15,10 +15,6 @@ public class MessageBrokerController(
     PublishMessageUseCase publishMessageUseCase,
     ReceiveMessagesUseCase receiveMessagesUseCase) : ControllerBase
 {
-    private readonly ILogger<MessageBrokerController> _logger = logger;
-    private readonly PublishMessageUseCase _publishMessageUseCase = publishMessageUseCase;
-    private readonly ReceiveMessagesUseCase _receiveMessagesUseCase = receiveMessagesUseCase;
-
     /// <summary>
     /// Publishes a message to RabbitMQ
     /// </summary>
@@ -32,7 +28,7 @@ public class MessageBrokerController(
     {
         try
         {
-            var result = await _publishMessageUseCase.ExecuteAsync(request, cancellationToken);
+            var result = await publishMessageUseCase.ExecuteAsync(request, cancellationToken);
 
             return result.Success
                 ? Ok(result)
@@ -40,7 +36,7 @@ public class MessageBrokerController(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while publishing message to topic {Topic}", request.Topic);
+            logger.LogError(ex, "Error occurred while publishing message to topic {Topic}", request.Topic);
             return StatusCode(500, new PublishMessageResponse(false, ex.Message));
         }
     }
@@ -61,7 +57,7 @@ public class MessageBrokerController(
         try
         {
             var request = new ReceiveMessagesRequest(topic, maxMessages);
-            var result = await _receiveMessagesUseCase.ExecuteAsync(request, cancellationToken);
+            var result = await receiveMessagesUseCase.ExecuteAsync(request, cancellationToken);
 
             return result.Success
                 ? Ok(result)
@@ -69,7 +65,7 @@ public class MessageBrokerController(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while receiving messages from topic {Topic}", topic);
+            logger.LogError(ex, "Error occurred while receiving messages from topic {Topic}", topic);
             return StatusCode(500, new ReceiveMessagesResponse(false, [], ex.Message));
         }
     }

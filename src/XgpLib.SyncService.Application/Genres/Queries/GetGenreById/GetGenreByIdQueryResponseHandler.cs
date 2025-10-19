@@ -1,5 +1,4 @@
 ﻿using Ardalis.Result;
-using XgpLib.SyncService.Application.Abstractions.Messaging;
 
 namespace XgpLib.SyncService.Application.Genres.Queries.GetGenreById;
 

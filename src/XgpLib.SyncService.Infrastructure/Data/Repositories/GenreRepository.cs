@@ -22,15 +22,10 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
         {
             var existingGenre = await _context.Genres.FindAsync([genre.Id], cancellationToken);
             if (existingGenre == null)
-            {
                 _context.Genres.Add(genre);
-            }
             else
-            {
                 _context.Entry(existingGenre).CurrentValues.SetValues(genre);
-            }
         }
-        await _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
