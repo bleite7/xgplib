@@ -19,5 +19,5 @@ public interface IGenreRepository
     /// <param name="genreId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Genre> GetGenreById(long genreId, CancellationToken cancellationToken);
+    Task<Genre?> GetGenreById(long genreId, CancellationToken cancellationToken);
 }
