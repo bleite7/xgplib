@@ -1,5 +1,6 @@
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.DTOs;
+using XgpLib.SyncService.Application.Events;
 using XgpLib.SyncService.Application.Genres.Commands.SyncGenres;
 using XgpLib.SyncService.Domain.Entities;
 
@@ -13,18 +14,18 @@ public class IgdbGenresSyncWorker(
     private const int MaxMessagesToReceive = 1;
     private static readonly string Queue = Queues.SyncGenres;
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
-            await ProcessSyncCycleAsync(stoppingToken);
-            await Task.Delay(PollingInterval, stoppingToken);
+            await ProcessSyncCycleAsync(cancellationToken);
+            await Task.Delay(PollingInterval, cancellationToken);
         }
     }
 
     #region Private Methods
 
-    private async Task ProcessSyncCycleAsync(CancellationToken stoppingToken)
+    private async Task ProcessSyncCycleAsync(CancellationToken cancellationToken)
     {
         var startTime = DateTimeOffset.UtcNow;
         logger.LogInformation("Starting genres synchronization at {Time}", startTime);
@@ -32,19 +33,38 @@ public class IgdbGenresSyncWorker(
         await using var scope = serviceProvider.CreateAsyncScope();
 
         var receiveMessagesUseCase = scope.ServiceProvider.GetRequiredService<ReceiveMessagesUseCase>();
+        var processMessageWithDlqUseCase = scope.ServiceProvider.GetRequiredService<ProcessMessageWithDlqUseCase<SyncGenresIntegrationEvent>>();
         var syncGenresCommandHandler = scope.ServiceProvider.GetRequiredService<ICommandHandler<SyncGenresCommand>>();
         try
         {
-            if (!(await HasMessageToProcessAsync(receiveMessagesUseCase, stoppingToken)).HasMessage)
+            var (HasMessage, Messages) = await HasMessageToProcessAsync(receiveMessagesUseCase, cancellationToken);
+            if (!HasMessage)
             {
                 LogSkippedSync(startTime);
                 return;
             }
 
             logger.LogInformation("{QueueName} message received. Starting synchronization", Queue);
-            var syncGenresCommand = new SyncGenresCommand();
-            await syncGenresCommandHandler.HandleAsync(syncGenresCommand, stoppingToken);
-            logger.LogInformation("Genres synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
+
+            var success = await processMessageWithDlqUseCase.ExecuteAsync(
+                Queue,
+                Messages[0],
+                async (gamesSyncEvent, cancellationToken) =>
+                {
+                    await syncGenresCommandHandler.HandleAsync(
+                        new SyncGenresCommand(),
+                        cancellationToken);
+                },
+                cancellationToken);
+
+            if (success)
+            {
+                logger.LogInformation("Genres synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
+            }
+            else
+            {
+                logger.LogWarning("Genres synchronization failed and message was sent to DLQ");
+            }
         }
         catch (Exception ex)
         {

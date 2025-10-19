@@ -41,6 +41,8 @@ public static class DependencyInjection
         services.AddScoped<IMessageBrokerService, RabbitMqService>();
         services.AddScoped<PublishMessageUseCase>();
         services.AddScoped<ReceiveMessagesUseCase>();
+        services.AddScoped<RejectMessageToDlqUseCase>();
+        services.AddScoped(typeof(ProcessMessageWithDlqUseCase<>));
 
         // Application UseCases
         services.Configure<IgdbConfiguration>(configuration.GetSection("Igdb"));

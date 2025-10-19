@@ -53,9 +53,9 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
             arguments: null,
             cancellationToken: cancellationToken);
 
-        var arguments = new Dictionary<string, object>
+        var arguments = new Dictionary<string, object?>
         {
-            { "x-dead-letter-exchange", "" }, // exchange padrão
+            { "x-dead-letter-exchange", "" },
             { "x-dead-letter-routing-key", dlqName }
         };
 
@@ -129,23 +129,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
             var connection = await _connectionLazy.Value;
             using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
 
-            // Declare the queue (ensure it exists)
-            await channel.QueueDeclareAsync(
-                queue: topic,
-                durable: true,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null,
-                cancellationToken: cancellationToken);
-
-            // Set prefetch count to limit the number of messages
-            await channel.BasicQosAsync(
-                prefetchSize: 0,
-                prefetchCount: (ushort)maxMessages,
-                global: false,
-                cancellationToken: cancellationToken);
-
-            _logger.LogInformation("Attempting to receive up to {MaxMessages} messages from topic {Topic}", maxMessages, topic);
+            _logger.LogInformation("Attempting to receive up to {MaxMessages} messages from queue {Queue}", maxMessages, topic);
 
             // Receive messages
             for (int i = 0; i < maxMessages; i++)
@@ -154,7 +138,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
 
                 if (result == null)
                 {
-                    _logger.LogInformation("No more messages available in topic {Topic}", topic);
+                    _logger.LogInformation("No more messages available in queue {Queue}", topic);
                     break;
                 }
 
@@ -167,18 +151,85 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
                     multiple: false,
                     cancellationToken: cancellationToken);
 
-                _logger.LogDebug("Received and acknowledged message from topic {Topic}: {Message}", topic, messageBody);
+                _logger.LogDebug("Received and acknowledged message from queue {Queue}: {Message}", topic, messageBody);
             }
 
-            _logger.LogInformation("Successfully received {Count} messages from topic {Topic}", messages.Count, topic);
+            _logger.LogInformation("Successfully received {Count} messages from queue {Queue}", messages.Count, topic);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to receive messages from topic {Topic}", topic);
+            _logger.LogError(ex, "Failed to receive messages from queue {Queue}", topic);
             throw;
         }
 
         return messages;
+    }
+
+    /// <summary>
+    /// Rejects a message and sends it to the dead letter queue
+    /// </summary>
+    /// <param name="queue">The queue name</param>
+    /// <param name="message">The message to reject</param>
+    /// <param name="reason">Reason for rejection</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Task</returns>
+    public async Task RejectMessageToDlqAsync(
+        string queue,
+        string message,
+        string reason,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var dlqName = $"{queue}.dlq";
+            var connection = await _connectionLazy.Value;
+            using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
+
+            // Ensure DLQ exists
+            await channel.QueueDeclareAsync(
+                queue: dlqName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null,
+                cancellationToken: cancellationToken);
+
+            var body = Encoding.UTF8.GetBytes(message);
+            var properties = new BasicProperties
+            {
+                Persistent = true,
+                Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds()),
+                Headers = new Dictionary<string, object?>
+                {
+                    { "x-original-queue", queue },
+                    { "x-rejection-reason", reason },
+                    { "x-rejected-at", DateTimeOffset.UtcNow.ToString("O") }
+                }
+            };
+
+            await channel.BasicPublishAsync(
+                exchange: "",
+                routingKey: dlqName,
+                mandatory: false,
+                basicProperties: properties,
+                body: body,
+                cancellationToken: cancellationToken);
+
+            _logger.LogWarning(
+                "Message rejected to DLQ {DlqName}. Reason: {Reason}. Message: {Message}",
+                dlqName,
+                reason,
+                message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                ex,
+                "Failed to reject message to DLQ for queue {Queue}. Message: {Message}",
+                queue,
+                message);
+            throw;
+        }
     }
 
     #region Private Methods

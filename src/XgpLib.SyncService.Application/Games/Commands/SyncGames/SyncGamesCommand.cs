@@ -1,6 +1,4 @@
-﻿using XgpLib.SyncService.Application.Abstractions.Messaging;
-
-namespace XgpLib.SyncService.Application.Games.Commands.SyncGames;
+﻿namespace XgpLib.SyncService.Application.Games.Commands.SyncGames;
 
 /// <summary>
 /// 

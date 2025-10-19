@@ -1,4 +1,3 @@
-using System.Text.Json;
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.DTOs;
 using XgpLib.SyncService.Application.Events;
@@ -12,7 +11,7 @@ public class IgdbGamesSyncWorker(
     IServiceProvider serviceProvider) : BackgroundService
 {
     private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
-    private static readonly string QueueName = Queues.SyncGames;
+    private static readonly string Queue = Queues.SyncGames;
     private const int MaxMessagesToReceive = 1;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,6 +33,7 @@ public class IgdbGamesSyncWorker(
         await using var scope = serviceProvider.CreateAsyncScope();
 
         var receiveMessagesUseCase = scope.ServiceProvider.GetRequiredService<ReceiveMessagesUseCase>();
+        var processMessageWithDlqUseCase = scope.ServiceProvider.GetRequiredService<ProcessMessageWithDlqUseCase<SyncGamesIntegrationEvent>>();
         var syncGamesCommandHandler = scope.ServiceProvider.GetRequiredService<ICommandHandler<SyncGamesCommand>>();
         try
         {
@@ -44,25 +44,27 @@ public class IgdbGamesSyncWorker(
                 return;
             }
 
-            SyncGamesIntegrationEvent? syncIntegrationEvent = JsonSerializer.Deserialize<SyncGamesIntegrationEvent>(
+            logger.LogInformation("{QueueName} message received. Starting synchronization", Queue);
+
+            var success = await processMessageWithDlqUseCase.ExecuteAsync(
+                Queue,
                 Messages[0],
-                new JsonSerializerOptions
+                async (gamesSyncEvent, cancellationToken) =>
                 {
-                    PropertyNameCaseInsensitive = true
-                });
+                    await syncGamesCommandHandler.HandleAsync(
+                        new SyncGamesCommand(gamesSyncEvent.PlatformsIds),
+                        cancellationToken);
+                },
+                stoppingToken);
 
-            if (syncIntegrationEvent == null)
+            if (success)
             {
-                logger.LogError("Failed to deserialize synchronization message. Skipping this cycle.");
-                LogSkippedSync(startTime);
-                return;
+                logger.LogInformation("Games synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
             }
-
-
-            logger.LogInformation("{QueueName} message received. Starting synchronization", QueueName);
-            var syncGamesCommand = new SyncGamesCommand(syncIntegrationEvent.PlatformsIds);
-            await syncGamesCommandHandler.HandleAsync(syncGamesCommand, stoppingToken);
-            logger.LogInformation("Games synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
+            else
+            {
+                logger.LogWarning("Games synchronization failed and message was sent to DLQ");
+            }
         }
         catch (Exception ex)
         {
@@ -79,7 +81,7 @@ public class IgdbGamesSyncWorker(
         CancellationToken stoppingToken)
     {
         var receiveResponse = await receiveMessagesUseCase.ExecuteAsync(
-            new ReceiveMessagesRequest(QueueName, MaxMessagesToReceive),
+            new ReceiveMessagesRequest(Queue, MaxMessagesToReceive),
             stoppingToken);
 
         // Return tuple without named elements to match the target type
@@ -88,7 +90,7 @@ public class IgdbGamesSyncWorker(
 
     private void LogSkippedSync(DateTimeOffset startTime)
     {
-        logger.LogInformation("No {QueueName} message found. Skipping synchronization", QueueName);
+        logger.LogInformation("No {QueueName} message found. Skipping synchronization", Queue);
         var elapsed = DateTimeOffset.UtcNow - startTime;
         logger.LogInformation("Games synchronization skipped at {Time} (Elapsed: {Elapsed}", DateTimeOffset.UtcNow, elapsed);
     }
