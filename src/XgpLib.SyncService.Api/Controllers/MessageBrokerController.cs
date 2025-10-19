@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mediator;
+using Microsoft.AspNetCore.Mvc;
 
 namespace XgpLib.SyncService.Api.Controllers;
 
@@ -37,7 +38,12 @@ public class MessageBrokerController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Error occurred while publishing message to topic {Topic}", request.Topic);
-            return StatusCode(500, new PublishMessageResponse(false, ex.Message));
+            return Problem(
+                title: "Internal Server Error",
+                detail: $"Error occurred while publishing message to topic {request.Topic}: {ex.Message}",
+                statusCode: StatusCodes.Status500InternalServerError,
+                instance: Request.Path
+            );
         }
     }
 
@@ -66,7 +72,12 @@ public class MessageBrokerController(
         catch (Exception ex)
         {
             logger.LogError(ex, "Error occurred while receiving messages from topic {Topic}", topic);
-            return StatusCode(500, new ReceiveMessagesResponse(false, [], ex.Message));
+            return Problem(
+                title: "Internal Server Error",
+                detail: $"Error occurred while receiving messages from topic {topic}: {ex.Message}",
+                statusCode: StatusCodes.Status500InternalServerError,
+                instance: Request.Path
+            );
         }
     }
 }
