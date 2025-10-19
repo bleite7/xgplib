@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace XgpLib.SyncService.Application.DTOs;
+﻿namespace XgpLib.SyncService.Application.DTOs;
 
 public record IgdbGenre
 {

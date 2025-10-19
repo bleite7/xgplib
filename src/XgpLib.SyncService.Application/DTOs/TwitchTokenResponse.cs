@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace XgpLib.SyncService.Infrastructure.Services;
+﻿namespace XgpLib.SyncService.Infrastructure.Services;
 
 public record TwitchTokenResponse
 {

@@ -1,8 +1,10 @@
-﻿using XgpLib.SyncService.Application.Abstractions.Services;
+﻿namespace XgpLib.SyncService.Application.UseCases;
 
-namespace XgpLib.SyncService.Application.UseCases;
-
-
+/// <summary>
+/// 
+/// </summary>
+/// <param name="logger"></param>
+/// <param name="messageBrokerService"></param>
 public class GetMessageUseCase(
     ILogger<GetMessageUseCase> logger,
     IMessageBrokerService messageBrokerService)

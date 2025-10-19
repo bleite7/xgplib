@@ -5,6 +5,7 @@ using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.Abstractions.Services;
 using XgpLib.SyncService.Application.Games.Commands.SyncGames;
 using XgpLib.SyncService.Application.Genres.Commands.SyncGenres;
+using XgpLib.SyncService.Application.Genres.Queries.GetGenreById;
 using XgpLib.SyncService.Application.UseCases;
 using XgpLib.SyncService.Domain.Interfaces.Repositories;
 using XgpLib.SyncService.Infrastructure.Configuration;
@@ -44,6 +45,7 @@ public static class DependencyInjection
         services.Configure<IgdbConfiguration>(configuration.GetSection("Igdb"));
         services.AddScoped<ICommandHandler<SyncGamesCommand>, SyncGamesCommandHandler>();
         services.AddScoped<ICommandHandler<SyncGenresCommand>, SyncGenresCommandHandler>();
+        services.AddScoped<IQueryHandler<GetGenreByIdQuery, GenreResponse>, GetGenreByIdQueryResponseHandler>();
 
         // Infrastructure
         services.AddScoped<TwitchAuthenticationHandler>();

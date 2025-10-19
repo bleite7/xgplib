@@ -1,9 +1,19 @@
 ﻿namespace XgpLib.SyncService.Infrastructure.Data.Repositories;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="context"></param>
 public class GenreRepository(XgpLibDbContext context) : IGenreRepository
 {
     private readonly XgpLibDbContext _context = context;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="genres"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task AddOrUpdateRangeAsync(
         IEnumerable<Genre> genres,
         CancellationToken cancellationToken = default)
@@ -21,5 +31,18 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
             }
         }
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="genreId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<Genre?> GetGenreById(
+        long genreId,
+        CancellationToken cancellationToken = default)
+    {
+        return await _context.Genres.FindAsync([genreId], cancellationToken);
     }
 }

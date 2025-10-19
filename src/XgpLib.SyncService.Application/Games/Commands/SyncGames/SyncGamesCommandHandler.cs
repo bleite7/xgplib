@@ -10,7 +10,7 @@ namespace XgpLib.SyncService.Application.Games.Commands.SyncGames;
 /// <param name="logger"></param>
 /// <param name="igdbService"></param>
 /// <param name="gameRepository"></param>
-public class SyncGamesCommandHandler(
+public sealed class SyncGamesCommandHandler(
     ILogger<SyncGamesCommandHandler> logger,
     IIgdbService igdbService,
     IGameRepository gameRepository) : ICommandHandler<SyncGamesCommand>

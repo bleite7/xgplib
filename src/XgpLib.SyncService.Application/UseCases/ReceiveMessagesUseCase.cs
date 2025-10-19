@@ -1,6 +1,4 @@
-﻿using XgpLib.SyncService.Application.Abstractions.Services;
-
-namespace XgpLib.SyncService.Application.UseCases;
+﻿namespace XgpLib.SyncService.Application.UseCases;
 
 /// <summary>
 /// Use case for receiving messages from a message broker topic

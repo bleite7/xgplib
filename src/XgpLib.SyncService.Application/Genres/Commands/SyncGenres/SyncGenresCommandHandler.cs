@@ -10,7 +10,7 @@ namespace XgpLib.SyncService.Application.Genres.Commands.SyncGenres;
 /// <param name="logger"></param>
 /// <param name="igdbService"></param>
 /// <param name="genreRepository"></param>
-public class SyncGenresCommandHandler(
+public sealed class SyncGenresCommandHandler(
     ILogger<SyncGenresCommandHandler> logger,
     IIgdbService igdbService,
     IGenreRepository genreRepository) : ICommandHandler<SyncGenresCommand>
