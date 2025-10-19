@@ -1,19 +1,32 @@
-﻿using MediatR;
+﻿using Ardalis.Result;
 using System.Text.Json;
-using XgpLib.SyncService.Application.Commands;
+using XgpLib.SyncService.Application.Abstractions.Messaging;
+using XgpLib.SyncService.Application.Abstractions.Services;
 
-namespace XgpLib.SyncService.Application.Handlers;
+namespace XgpLib.SyncService.Application.Genres.SyncGenres;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="logger"></param>
+/// <param name="igdbService"></param>
+/// <param name="genreRepository"></param>
 public class SyncGenresCommandHandler(
     ILogger<SyncGenresCommandHandler> logger,
     IIgdbService igdbService,
-    IGenreRepository genreRepository) : IRequestHandler<SyncGenresCommand, Unit>
+    IGenreRepository genreRepository) : ICommandHandler<SyncGenresCommand>
 {
     private readonly ILogger<SyncGenresCommandHandler> _logger = logger;
     private readonly IIgdbService _igdbService = igdbService;
     private readonly IGenreRepository _genreRepository = genreRepository;
 
-    public async Task<Unit> Handle(SyncGenresCommand request, CancellationToken cancellationToken)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<Result> HandleAsync(SyncGenresCommand command, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Fetching genres from IGDB API");
 
@@ -21,7 +34,7 @@ public class SyncGenresCommandHandler(
         if (genresFromApi is null || !genresFromApi.Any())
         {
             _logger.LogWarning("No genres found in the API response");
-            return Unit.Value;
+            return Result.Success();
         }
 
         _logger.LogInformation("Fetched {Count} genres from IGDB API", genresFromApi.Count());
@@ -45,6 +58,6 @@ public class SyncGenresCommandHandler(
             throw;
         }
 
-        return Unit.Value;
+        return Result.Success();
     }
 }

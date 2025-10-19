@@ -1,4 +1,4 @@
-﻿namespace XgpLib.SyncService.Infrastructure.Interfaces.Services;
+﻿namespace XgpLib.SyncService.Application.Abstractions.Services;
 
 /// <summary>
 /// Interface for message broker service

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using XgpLib.SyncService.Application.Commands;
-using XgpLib.SyncService.Application.Interfaces.Services;
+using XgpLib.SyncService.Application.Abstractions.Messaging;
+using XgpLib.SyncService.Application.Abstractions.Services;
+using XgpLib.SyncService.Application.Games.SyncGames;
+using XgpLib.SyncService.Application.Genres.SyncGenres;
 using XgpLib.SyncService.Application.UseCases;
 using XgpLib.SyncService.Domain.Interfaces.Repositories;
 using XgpLib.SyncService.Infrastructure.Configuration;
@@ -33,13 +34,6 @@ public static class DependencyInjection
             .GetConnectionString("XgpLibPostgres"))
             .UseSnakeCaseNamingConvention());
 
-        
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(SyncGamesCommand).Assembly);
-            cfg.RegisterServicesFromAssembly(typeof(SyncGenresCommand).Assembly);
-        });
-
         // Message Broker - RabbitMQ
         services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMq"));
         services.AddScoped<IMessageBrokerService, RabbitMqService>();
@@ -48,6 +42,8 @@ public static class DependencyInjection
 
         // Application UseCases
         services.Configure<IgdbConfiguration>(configuration.GetSection("Igdb"));
+        services.AddScoped<ICommandHandler<SyncGamesCommand>, SyncGamesCommandHandler>();
+        services.AddScoped<ICommandHandler<SyncGenresCommand>, SyncGenresCommandHandler>();
 
         // Infrastructure
         services.AddScoped<TwitchAuthenticationHandler>();

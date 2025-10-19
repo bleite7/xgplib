@@ -1,4 +1,4 @@
-﻿using XgpLib.SyncService.Infrastructure.Interfaces.Services;
+﻿using XgpLib.SyncService.Application.Abstractions.Services;
 
 namespace XgpLib.SyncService.Application.UseCases;
 

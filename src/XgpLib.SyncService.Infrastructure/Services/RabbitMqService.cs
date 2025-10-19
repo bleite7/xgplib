@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System.Text;
+using XgpLib.SyncService.Application.Abstractions.Services;
 using XgpLib.SyncService.Infrastructure.Configuration;
 
 namespace XgpLib.SyncService.Infrastructure.Services;

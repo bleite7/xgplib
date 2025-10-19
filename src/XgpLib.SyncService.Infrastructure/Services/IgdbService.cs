@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text;
+using XgpLib.SyncService.Application.Abstractions.Services;
 using XgpLib.SyncService.Application.DTOs;
-using XgpLib.SyncService.Application.Interfaces.Services;
 
 namespace XgpLib.SyncService.Infrastructure.Services;
 
@@ -10,9 +10,9 @@ public class IgdbService(HttpClient httpClient) : IIgdbService
     private readonly HttpClient _httpClient = httpClient;
 
     public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken = default) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
-    public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformAsync(IEnumerable<int> platformIds, CancellationToken cancellationToken = default)
+    public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformsAsync(int[] platformsIds, CancellationToken cancellationToken = default)
     {
-        var platformsFilter = string.Join(",", platformIds);
+        var platformsFilter = string.Join(",", platformsIds);
         var whereClause = $"platforms = ({platformsFilter})";
         var fields = "name,slug,summary,storyline,platforms,genres";
 

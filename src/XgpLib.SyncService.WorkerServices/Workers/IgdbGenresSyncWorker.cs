@@ -1,6 +1,6 @@
-using MediatR;
-using XgpLib.SyncService.Application.Commands;
+using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.DTOs;
+using XgpLib.SyncService.Application.Genres.SyncGenres;
 
 namespace XgpLib.SyncService.WorkerServices.Workers;
 
@@ -9,7 +9,7 @@ public class IgdbGenresSyncWorker(
     IServiceProvider serviceProvider) : BackgroundService
 {
     private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
-    private const string QueueName = "sync_genres";
+    private const string QueueName = "sync";
     private const int MaxMessagesToReceive = 1;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,8 +30,8 @@ public class IgdbGenresSyncWorker(
 
         await using var scope = serviceProvider.CreateAsyncScope();
 
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var receiveMessagesUseCase = scope.ServiceProvider.GetRequiredService<ReceiveMessagesUseCase>();
+        var syncGenresCommandHandler = scope.ServiceProvider.GetRequiredService<ICommandHandler<SyncGenresCommand>>();
         try
         {
             if (!(await HasMessageToProcessAsync(receiveMessagesUseCase, stoppingToken)).HasMessage)
@@ -41,7 +41,8 @@ public class IgdbGenresSyncWorker(
             }
 
             logger.LogInformation("{QueueName} message received. Starting synchronization", QueueName);
-            await mediator.Send(new SyncGenresCommand(stoppingToken), stoppingToken);
+            var syncGenresCommand = new SyncGenresCommand();
+            await syncGenresCommandHandler.HandleAsync(syncGenresCommand, stoppingToken);
             logger.LogInformation("Genres synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
         }
         catch (Exception ex)

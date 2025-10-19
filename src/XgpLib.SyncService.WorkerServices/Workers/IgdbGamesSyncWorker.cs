@@ -1,6 +1,6 @@
-using MediatR;
-using XgpLib.SyncService.Application.Commands;
+using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.DTOs;
+using XgpLib.SyncService.Application.Games.SyncGames;
 
 namespace XgpLib.SyncService.WorkerServices.Workers;
 
@@ -9,7 +9,7 @@ public class IgdbGamesSyncWorker(
     IServiceProvider serviceProvider) : BackgroundService
 {
     private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
-    private const string QueueName = "sync_games";
+    private const string QueueName = "sync";
     private const int MaxMessagesToReceive = 1;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,8 +30,8 @@ public class IgdbGamesSyncWorker(
 
         await using var scope = serviceProvider.CreateAsyncScope();
 
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
         var receiveMessagesUseCase = scope.ServiceProvider.GetRequiredService<ReceiveMessagesUseCase>();
+        var syncGamesCommandHandler = scope.ServiceProvider.GetRequiredService<ICommandHandler<SyncGamesCommand>>();
         try
         {
             if (!(await HasMessageToProcessAsync(receiveMessagesUseCase, stoppingToken)).HasMessage)
@@ -41,7 +41,8 @@ public class IgdbGamesSyncWorker(
             }
 
             logger.LogInformation("{QueueName} message received. Starting synchronization", QueueName);
-            await mediator.Send(new SyncGamesCommand(stoppingToken), stoppingToken);
+            var syncGamesCommand = new SyncGamesCommand([3]);
+            await syncGamesCommandHandler.HandleAsync(syncGamesCommand, stoppingToken);
             logger.LogInformation("Games synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
         }
         catch (Exception ex)

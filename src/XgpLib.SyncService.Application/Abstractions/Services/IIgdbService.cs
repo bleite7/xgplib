@@ -1,4 +1,4 @@
-﻿namespace XgpLib.SyncService.Application.Interfaces.Services;
+﻿namespace XgpLib.SyncService.Application.Abstractions.Services;
 
 /// <summary>
 /// Interface for IGDB service to fetch data from IGDB API
@@ -13,10 +13,10 @@ public interface IIgdbService
     Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// Fetch games by platform IDs from IGDB API
+    /// Fetch games by platforms IDs from IGDB API
     /// </summary>
-    /// <param name="platformIds">List of platform IDs</param>
+    /// <param name="platformsIds">List of platform IDs</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>List of games</returns>
-    Task<IEnumerable<IgdbGame>> FetchGamesByPlatformAsync(IEnumerable<int> platformIds, CancellationToken cancellationToken);
+    Task<IEnumerable<IgdbGame>> FetchGamesByPlatformsAsync(int[] platformsIds, CancellationToken cancellationToken);
 }
