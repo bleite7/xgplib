@@ -1,6 +1,6 @@
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.DTOs;
-using XgpLib.SyncService.Application.Genres.SyncGenres;
+using XgpLib.SyncService.Application.Genres.Commands.SyncGenres;
 
 namespace XgpLib.SyncService.WorkerServices.Workers;
 

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 
-namespace XgpLib.SyncService.Application.Games.SyncGames;
+namespace XgpLib.SyncService.Application.Games.Commands.SyncGames;
 
 /// <summary>
 /// 
