@@ -2,6 +2,11 @@
 
 namespace XgpLib.SyncService.Infrastructure.HttpHandlers;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="tokenManager"></param>
+/// <param name="configuration"></param>
 public class TwitchAuthenticationHandler(
     ITokenManagerService tokenManager,
     IConfiguration configuration) : DelegatingHandler
@@ -9,6 +14,12 @@ public class TwitchAuthenticationHandler(
     private readonly ITokenManagerService _tokenManager = tokenManager;
     private readonly IConfiguration _configuration = configuration;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var token = await _tokenManager.GetValidTokenAsync(cancellationToken);

@@ -1,9 +1,15 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
+using XgpLib.SyncService.Application.DTOs;
 using XgpLib.SyncService.Infrastructure.Configuration;
 
 namespace XgpLib.SyncService.Infrastructure.Services;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="httpClient"></param>
+/// <param name="configuration"></param>
 public class TokenManagerService(
     HttpClient httpClient,
     IOptions<IgdbConfiguration> configuration) : ITokenManagerService
@@ -12,6 +18,12 @@ public class TokenManagerService(
     private readonly IgdbConfiguration _configuration = configuration.Value;
     private static readonly SemaphoreSlim Semaphore = new(1, 1);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public async Task<string> GetValidTokenAsync(CancellationToken cancellationToken)
     {
         if (TokenCache.IsTokenValid())
