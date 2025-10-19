@@ -34,7 +34,7 @@ public class IgdbGenresSyncWorker(
         var receiveMessagesUseCase = scope.ServiceProvider.GetRequiredService<ReceiveMessagesUseCase>();
         try
         {
-            if (!await HasMessageToProcessAsync(receiveMessagesUseCase, stoppingToken))
+            if (!(await HasMessageToProcessAsync(receiveMessagesUseCase, stoppingToken)).HasMessage)
             {
                 LogSkippedSync(startTime);
                 return;
@@ -54,7 +54,7 @@ public class IgdbGenresSyncWorker(
         }
     }
 
-    private async static Task<bool> HasMessageToProcessAsync(
+    private async static Task<(bool HasMessage, List<string> Messages)> HasMessageToProcessAsync(
         ReceiveMessagesUseCase receiveMessagesUseCase,
         CancellationToken stoppingToken)
     {
@@ -62,7 +62,8 @@ public class IgdbGenresSyncWorker(
             new ReceiveMessagesRequest(QueueName, MaxMessagesToReceive),
             stoppingToken);
 
-        return receiveResponse.Messages.Count > 0;
+        // Return tuple without named elements to match the target type
+        return (receiveResponse.Messages.Count > 0, receiveResponse.Messages);
     }
 
     private void LogSkippedSync(DateTimeOffset startTime)
