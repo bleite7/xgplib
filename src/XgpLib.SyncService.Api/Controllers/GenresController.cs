@@ -5,10 +5,10 @@ using XgpLib.SyncService.Application.Genres.Queries.GetGenreById;
 namespace XgpLib.SyncService.Api.Controllers;
 
 /// <summary>
-/// 
+/// Controller for managing genre-related operations.
 /// </summary>
-/// <param name="logger"></param>
-/// <param name="getGenreByIdCommandHandler"></param>
+/// <param name="logger">Logger instance</param>
+/// <param name="getGenreByIdCommandHandler">Handler for retrieving genre by ID</param>
 [ApiController]
 [Route("api/[controller]")]
 public class GenresController(
@@ -16,11 +16,15 @@ public class GenresController(
     IQueryHandler<GetGenreByIdQuery, GenreResponse> getGenreByIdCommandHandler) : ControllerBase
 {
     /// <summary>
-    /// 
+    /// Retrieves a genre by its unique identifier.
     /// </summary>
-    /// <param name="genreId"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="genreId">The unique identifier of the genre (must be positive)</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The genre details if found</returns>
+    /// <response code="200">Returns the genre details</response>
+    /// <response code="400">If the genre ID is invalid</response>
+    /// <response code="404">If the genre is not found</response>
+    /// <response code="500">An error occurred while processing request</response>
     [HttpGet("{genreId}")]
     public async Task<IActionResult> GetGenreById([FromRoute] long genreId, CancellationToken cancellationToken)
     {

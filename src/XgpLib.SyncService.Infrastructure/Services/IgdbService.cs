@@ -5,11 +5,27 @@ using XgpLib.SyncService.Application.DTOs;
 
 namespace XgpLib.SyncService.Infrastructure.Services;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="httpClient"></param>
 public class IgdbService(HttpClient httpClient) : IIgdbService
 {
     private readonly HttpClient _httpClient = httpClient;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken = default) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="platformsIds"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformsAsync(int[] platformsIds, CancellationToken cancellationToken = default)
     {
         var platformsFilter = string.Join(",", platformsIds);
