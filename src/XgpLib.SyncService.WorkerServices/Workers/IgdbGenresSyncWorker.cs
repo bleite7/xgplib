@@ -1,6 +1,7 @@
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.DTOs;
 using XgpLib.SyncService.Application.Genres.Commands.SyncGenres;
+using XgpLib.SyncService.Domain.Entities;
 
 namespace XgpLib.SyncService.WorkerServices.Workers;
 
@@ -9,8 +10,8 @@ public class IgdbGenresSyncWorker(
     IServiceProvider serviceProvider) : BackgroundService
 {
     private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
-    private const string QueueName = "sync";
     private const int MaxMessagesToReceive = 1;
+    private static readonly string Queue = Queues.SyncGenres;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -40,7 +41,7 @@ public class IgdbGenresSyncWorker(
                 return;
             }
 
-            logger.LogInformation("{QueueName} message received. Starting synchronization", QueueName);
+            logger.LogInformation("{QueueName} message received. Starting synchronization", Queue);
             var syncGenresCommand = new SyncGenresCommand();
             await syncGenresCommandHandler.HandleAsync(syncGenresCommand, stoppingToken);
             logger.LogInformation("Genres synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
@@ -60,7 +61,7 @@ public class IgdbGenresSyncWorker(
         CancellationToken stoppingToken)
     {
         var receiveResponse = await receiveMessagesUseCase.ExecuteAsync(
-            new ReceiveMessagesRequest(QueueName, MaxMessagesToReceive),
+            new ReceiveMessagesRequest(Queue, MaxMessagesToReceive),
             stoppingToken);
 
         // Return tuple without named elements to match the target type
@@ -69,7 +70,7 @@ public class IgdbGenresSyncWorker(
 
     private void LogSkippedSync(DateTimeOffset startTime)
     {
-        logger.LogInformation("No {QueueName} message found. Skipping synchronization", QueueName);
+        logger.LogInformation("No {QueueName} message found. Skipping synchronization", Queue);
         var elapsed = DateTimeOffset.UtcNow - startTime;
         logger.LogInformation("Genres synchronization skipped at {Time} (Elapsed: {Elapsed}", DateTimeOffset.UtcNow, elapsed);
     }

@@ -1,6 +1,9 @@
+using System.Text.Json;
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.DTOs;
+using XgpLib.SyncService.Application.Events;
 using XgpLib.SyncService.Application.Games.Commands.SyncGames;
+using XgpLib.SyncService.Domain.Entities;
 
 namespace XgpLib.SyncService.WorkerServices.Workers;
 
@@ -9,7 +12,7 @@ public class IgdbGamesSyncWorker(
     IServiceProvider serviceProvider) : BackgroundService
 {
     private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
-    private const string QueueName = "sync";
+    private static readonly string QueueName = Queues.SyncGames;
     private const int MaxMessagesToReceive = 1;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,14 +37,30 @@ public class IgdbGamesSyncWorker(
         var syncGamesCommandHandler = scope.ServiceProvider.GetRequiredService<ICommandHandler<SyncGamesCommand>>();
         try
         {
-            if (!(await HasMessageToProcessAsync(receiveMessagesUseCase, stoppingToken)).HasMessage)
+            var (HasMessage, Messages) = await HasMessageToProcessAsync(receiveMessagesUseCase, stoppingToken);
+            if (!HasMessage)
             {
                 LogSkippedSync(startTime);
                 return;
             }
 
+            SyncGamesIntegrationEvent? syncIntegrationEvent = JsonSerializer.Deserialize<SyncGamesIntegrationEvent>(
+                Messages[0],
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            if (syncIntegrationEvent == null)
+            {
+                logger.LogError("Failed to deserialize synchronization message. Skipping this cycle.");
+                LogSkippedSync(startTime);
+                return;
+            }
+
+
             logger.LogInformation("{QueueName} message received. Starting synchronization", QueueName);
-            var syncGamesCommand = new SyncGamesCommand([3]);
+            var syncGamesCommand = new SyncGamesCommand(syncIntegrationEvent.PlatformsIds);
             await syncGamesCommandHandler.HandleAsync(syncGamesCommand, stoppingToken);
             logger.LogInformation("Games synchronization finished successfully at {Time}", DateTimeOffset.UtcNow);
         }

@@ -27,17 +27,17 @@ public class ReceiveMessagesUseCase(
             _logger.LogInformation(
                 "Receiving up to {MaxMessages} messages from topic {Topic}",
                 request.MaxMessages,
-                request.Topic);
+                request.Queue);
 
             var messages = await _messageBrokerService.ReceiveMessagesAsync(
-                request.Topic,
+                request.Queue,
                 request.MaxMessages,
                 cancellationToken);
 
             _logger.LogInformation(
                 "Successfully received {Count} messages from topic {Topic}",
                 messages.Count,
-                request.Topic);
+                request.Queue);
 
             return new ReceiveMessagesResponse(true, messages);
         }
@@ -46,7 +46,7 @@ public class ReceiveMessagesUseCase(
             _logger.LogError(
                 ex,
                 "Error receiving messages from topic {Topic}",
-                request.Topic);
+                request.Queue);
 
             return new ReceiveMessagesResponse(false, [], ex.Message);
         }
