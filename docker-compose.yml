@@ -4,12 +4,17 @@ services:
       context: .
       dockerfile: src/XgpLib.SyncService.Api/Dockerfile
     ports:
-      - "8080:8080"
+      - "3080:80"
+      - "3443:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=-\0pw-
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - ConnectionStrings__XgpLibPostgres=Host=postgres;Port=5432;Database=xgplib;Username=ademir;Password=1234@4321
       - RabbitMq__HostName=rabbitmq
+    volumes:
+      - ~/.aspnet/https:/https:ro
     depends_on:
       - postgres
       - rabbitmq
