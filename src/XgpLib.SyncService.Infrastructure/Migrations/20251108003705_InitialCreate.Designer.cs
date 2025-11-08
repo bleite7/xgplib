@@ -12,15 +12,15 @@ using XgpLib.SyncService.Infrastructure.Data;
 namespace XgpLib.SyncService.Infrastructure.Migrations
 {
     [DbContext(typeof(XgpLibDbContext))]
-    [Migration("20250913195059_AddGameGenres")]
-    partial class AddGameGenres
+    [Migration("20251108003705_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "9.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

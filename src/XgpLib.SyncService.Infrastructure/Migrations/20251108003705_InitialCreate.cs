@@ -17,6 +17,7 @@ namespace XgpLib.SyncService.Infrastructure.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
+                    genres = table.Column<int[]>(type: "integer[]", nullable: false),
                     data = table.Column<string>(type: "jsonb", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     created_by = table.Column<string>(type: "text", nullable: true),
