@@ -154,7 +154,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
                 _logger.LogDebug("Received and acknowledged message from queue {Queue}: {Message}", topic, messageBody);
             }
 
-            _logger.LogInformation("Successfully received {Count} messages from queue {Queue}", messages.Count, topic);
+            _logger.LogInformation("Received {Count} messages from queue {Queue}", messages.Count, topic);
         }
         catch (Exception ex)
         {

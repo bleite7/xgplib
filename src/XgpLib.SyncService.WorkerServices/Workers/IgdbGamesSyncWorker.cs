@@ -10,7 +10,7 @@ public class IgdbGamesSyncWorker(
     ILogger<IgdbGamesSyncWorker> logger,
     IServiceProvider serviceProvider) : BackgroundService
 {
-    private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(30);
     private static readonly string Queue = Queues.SyncGames;
     private const int MaxMessagesToReceive = 1;
 

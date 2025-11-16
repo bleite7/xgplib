@@ -10,7 +10,7 @@ public class IgdbGenresSyncWorker(
     ILogger<IgdbGenresSyncWorker> logger,
     IServiceProvider serviceProvider) : BackgroundService
 {
-    private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(30);
     private const int MaxMessagesToReceive = 1;
     private static readonly string Queue = Queues.SyncGenres;
 
