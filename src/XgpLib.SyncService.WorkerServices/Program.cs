@@ -20,7 +20,7 @@ builder.Services.AddSyncServiceDependencies(builder.Configuration);
 
 // Register the synchronization workers
 builder.Services.AddHostedService<IgdbGenresSyncWorker>();
-//builder.Services.AddHostedService<IgdbGamesSyncWorker>();
+builder.Services.AddHostedService<IgdbGamesSyncWorker>();
 
 // Run the application
 var host = builder.Build();
