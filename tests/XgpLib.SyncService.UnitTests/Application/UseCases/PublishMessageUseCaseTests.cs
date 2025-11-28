@@ -128,7 +128,7 @@ public class PublishMessageUseCaseTests
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Publishing message to topic")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Publishing message to topic")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.AtLeastOnce);
@@ -154,7 +154,7 @@ public class PublishMessageUseCaseTests
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Failed to publish message")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Failed to publish message")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);

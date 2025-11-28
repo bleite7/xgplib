@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Ardalis.Result;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using XgpLib.SyncService.Application.Abstractions.Data;
@@ -49,7 +50,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<ICommandHandler<SyncGamesCommand>, SyncGamesCommandHandler>();
         services.AddScoped<ICommandHandler<SyncGenresCommand>, SyncGenresCommandHandler>();
-        services.AddScoped<IQueryHandler<GetGenreByIdQuery, GenreResponse>, GetGenreByIdQueryResponseHandler>();
+        services.AddScoped<IQueryHandler<GetGenreByIdQuery, Result<GenreResponse>>, GetGenreByIdQueryResponseHandler>();
 
         // Infrastructure
         services.AddScoped<TwitchAuthenticationHandler>();

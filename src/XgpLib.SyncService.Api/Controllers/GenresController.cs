@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ardalis.Result;
+using Microsoft.AspNetCore.Mvc;
 using XgpLib.SyncService.Application.Abstractions.Messaging;
 using XgpLib.SyncService.Application.Genres.Queries.GetGenreById;
 
@@ -13,7 +14,7 @@ namespace XgpLib.SyncService.Api.Controllers;
 [Route("api/[controller]")]
 public class GenresController(
     ILogger<GenresController> logger,
-    IQueryHandler<GetGenreByIdQuery, GenreResponse> getGenreByIdCommandHandler) : ControllerBase
+    IQueryHandler<GetGenreByIdQuery, Result<GenreResponse>> getGenreByIdCommandHandler) : ControllerBase
 {
     /// <summary>
     /// Retrieves a genre by its unique identifier.
@@ -43,7 +44,17 @@ public class GenresController(
             var query = new GetGenreByIdQuery(genreId);
             var result = await getGenreByIdCommandHandler.HandleAsync(query, cancellationToken);
 
-            return result is null ? NotFound() : Ok(result);
+            if (result.Status == ResultStatus.NotFound)
+            {
+                return NotFound();
+            }
+
+            return result.IsSuccess ? Ok(result.Value) : Problem(
+                title: "Error retrieving genre",
+                detail: string.Join(", ", result.Errors),
+                statusCode: StatusCodes.Status500InternalServerError,
+                instance: Request.Path
+            );
         }
         catch (Exception ex)
         {

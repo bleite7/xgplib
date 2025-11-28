@@ -79,7 +79,7 @@ public class SyncGenresCommandHandlerTests
 
         _igdbServiceMock
             .Setup(x => x.FetchGenresAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((IEnumerable<IgdbGenre>?)null);
+            .ReturnsAsync((IEnumerable<IgdbGenre>?)null!);
 
         // Act
         var result = await _handler.HandleAsync(command, CancellationToken.None);
@@ -249,7 +249,7 @@ public class SyncGenresCommandHandlerTests
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Fetching genres from IGDB API")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Fetching genres from IGDB API")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -258,7 +258,7 @@ public class SyncGenresCommandHandlerTests
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Fetched 5 genres from IGDB API")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Fetched 5 genres from IGDB API")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -267,7 +267,7 @@ public class SyncGenresCommandHandlerTests
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Successfully synchronized")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Successfully synchronized")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -291,7 +291,7 @@ public class SyncGenresCommandHandlerTests
             x => x.Log(
                 LogLevel.Warning,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("No genres found in the API response")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("No genres found in the API response")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -328,7 +328,7 @@ public class SyncGenresCommandHandlerTests
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Failed to synchronize genres")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Failed to synchronize genres")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
