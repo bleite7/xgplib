@@ -209,3 +209,9 @@ FakesAssemblies/
 
 # JetBrains Rider
 *.sln.iml
+
+# SonarCloud
+.sonarqube/
+.sonar/
+**/.sonarqube/
+**/.sonar/
