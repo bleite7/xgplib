@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Ardalis.Result;
 using XgpLib.SyncService.Application.Genres.Commands.SyncGenres;
 using XgpLib.SyncService.UnitTests.Helpers;
 
@@ -105,7 +104,7 @@ public class SyncGenresCommandHandlerTests
 
         _igdbServiceMock
             .Setup(x => x.FetchGenresAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<IgdbGenre>());
+            .ReturnsAsync([]);
 
         // Act
         var result = await _handler.HandleAsync(command, CancellationToken.None);
@@ -137,7 +136,7 @@ public class SyncGenresCommandHandlerTests
 
         _igdbServiceMock
             .Setup(x => x.FetchGenresAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new[] { igdbGenre });
+            .ReturnsAsync([igdbGenre]);
 
         Genre? capturedGenre = null;
         _genreRepositoryMock
@@ -281,7 +280,7 @@ public class SyncGenresCommandHandlerTests
 
         _igdbServiceMock
             .Setup(x => x.FetchGenresAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<IgdbGenre>());
+            .ReturnsAsync([]);
 
         // Act
         await _handler.HandleAsync(command, CancellationToken.None);
