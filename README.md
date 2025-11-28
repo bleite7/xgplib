@@ -11,6 +11,16 @@ Synchronizes games, genres and related reference data from the IGDB API (via Twi
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 ![Status](https://img.shields.io/badge/status-Active-success)
 
+<!-- SonarCloud Badges -->
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=coverage)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=bugs)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=bleite7_xgplib&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=bleite7_xgplib)
+
 </div>
 
 ## Table of Contents
