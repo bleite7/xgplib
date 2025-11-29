@@ -7,3 +7,8 @@ global using XgpLib.SyncService.Domain.Interfaces.Repositories;
 global using XgpLib.SyncService.Application.DTOs;
 global using XgpLib.SyncService.Application.Abstractions.Services;
 global using XgpLib.SyncService.Application.Abstractions.Data;
+global using XgpLib.SyncService.Application.Genres.Commands.SyncGenres;
+global using XgpLib.SyncService.Application.Genres.Queries.GetGenreById;
+global using XgpLib.SyncService.Application.Games.Commands.SyncGames;
+global using XgpLib.SyncService.Application.UseCases;
+global using XgpLib.SyncService.UnitTests.Helpers;
