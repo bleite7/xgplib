@@ -11,7 +11,7 @@ services:
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=-\0pw-
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-      - ConnectionStrings__XgpLibPostgres=Host=postgres;Port=5432;Database=xgplib;Username=ademir;Password=1234@4321
+      - ConnectionStrings__XgpLibPostgres=Host=postgres;Port=5432;Database=xgplib;Username=;Password=
       - RabbitMq__HostName=rabbitmq
     volumes:
       - ~/.aspnet/https:/https:ro
@@ -25,7 +25,7 @@ services:
     image: postgres:17
     environment:
       POSTGRES_USER: ademir
-      POSTGRES_PASSWORD: 1234@4321
+      POSTGRES_PASSWORD:
       POSTGRES_DB: xgplib
     ports:
       - "5432:5432"
@@ -38,7 +38,7 @@ services:
     image: rabbitmq:4-management
     environment:
       RABBITMQ_DEFAULT_USER: ademir
-      RABBITMQ_DEFAULT_PASS: 1234@4321
+      RABBITMQ_DEFAULT_PASS:
     ports:
       - "5672:5672"
       - "15672:15672"
