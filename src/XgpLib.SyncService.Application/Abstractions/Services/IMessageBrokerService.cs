@@ -21,7 +21,7 @@ public interface IMessageBrokerService
     /// <param name="maxMessages">Maximum number of messages to receive</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>List of received messages</returns>
-    Task<List<string>> ReceiveMessagesAsync(string topic, int maxMessages, CancellationToken cancellationToken);
+    Task<List<string>> ReceiveMessagesAsync(string topic, short maxMessages, CancellationToken cancellationToken);
 
     /// <summary>
     /// Rejects a message and sends it to the dead letter queue

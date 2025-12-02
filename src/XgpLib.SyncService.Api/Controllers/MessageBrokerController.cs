@@ -56,7 +56,7 @@ public class MessageBrokerController(
     [HttpGet("receive/{topic}")]
     public async Task<ActionResult<ReceiveMessagesResponse>> ReceiveMessages(
         [FromRoute] string topic,
-        [FromQuery] int maxMessages = 10,
+        [FromQuery] short maxMessages = 10,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(topic))

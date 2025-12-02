@@ -21,7 +21,7 @@ public class ReceiveMessagesRequestTests
     {
         // Arrange
         var queue = "test-queue";
-        var maxMessages = 5;
+        short maxMessages = 5;
 
         // Act
         var request = new ReceiveMessagesRequest(queue, maxMessages);
@@ -52,7 +52,7 @@ public class ReceiveMessagesRequestTests
     [InlineData(10)]
     [InlineData(100)]
     [InlineData(int.MaxValue)]
-    public void ReceiveMessagesRequest_MaxMessages_ShouldAcceptVariousValues(int maxMessages)
+    public void ReceiveMessagesRequest_MaxMessages_ShouldAcceptVariousValues(short maxMessages)
     {
         // Act
         var request = new ReceiveMessagesRequest("test-queue", maxMessages);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
+using System.ComponentModel.Design;
 using System.Text;
 using XgpLib.SyncService.Application.Abstractions.Services;
 using XgpLib.SyncService.Infrastructure.Configuration;
@@ -16,6 +17,9 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
     private readonly RabbitMqConfiguration _configuration;
     private readonly Lazy<Task<IConnection>> _connectionLazy;
     private bool _disposed;
+
+    private static short MIN_BOUNDARY = 1;
+    private static short MAX_BOUNDARY = 500;
 
     /// <summary>
     /// Constructor for RabbitMqService.
@@ -120,7 +124,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
     /// <returns>List of received messages</returns>
     public async Task<List<string>> ReceiveMessagesAsync(
         string topic,
-        int maxMessages,
+        short maxMessages,
         CancellationToken cancellationToken)
     {
         var messages = new List<string>();
@@ -131,8 +135,13 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
 
             _logger.LogInformation("Attempting to receive up to {MaxMessages} messages from queue {Queue}", maxMessages, topic);
 
+            if (MIN_BOUNDARY > maxMessages)
+                maxMessages = MIN_BOUNDARY;
+            else if (maxMessages >MAX_BOUNDARY)
+                maxMessages = MAX_BOUNDARY;
+
             // Receive messages
-            for (int i = 0; i < maxMessages; i++)
+            for (short i = 0; i < maxMessages; i++)
             {
                 var result = await channel.BasicGetAsync(topic, autoAck: false, cancellationToken);
 
