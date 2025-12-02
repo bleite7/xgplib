@@ -47,11 +47,12 @@ public class ReceiveMessagesRequestTests
     }
 
     [Theory]
+    [InlineData(short.MinValue)]
     [InlineData(1)]
     [InlineData(5)]
     [InlineData(10)]
     [InlineData(100)]
-    [InlineData(int.MaxValue)]
+    [InlineData(short.MaxValue)]
     public void ReceiveMessagesRequest_MaxMessages_ShouldAcceptVariousValues(short maxMessages)
     {
         // Act
