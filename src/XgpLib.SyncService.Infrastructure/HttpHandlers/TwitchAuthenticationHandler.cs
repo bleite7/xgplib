@@ -3,7 +3,7 @@
 namespace XgpLib.SyncService.Infrastructure.HttpHandlers;
 
 /// <summary>
-/// 
+/// Twitch authentication HTTP handler
 /// </summary>
 /// <param name="tokenManager"></param>
 /// <param name="configuration"></param>
@@ -15,7 +15,7 @@ public class TwitchAuthenticationHandler(
     private readonly IConfiguration _configuration = configuration;
 
     /// <summary>
-    /// 
+    /// Sends the HTTP request with Twitch authentication headers
     /// </summary>
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
