@@ -13,8 +13,8 @@ public interface IQueryHandler<in TQuery, TResponse>
     /// 
     /// </summary>
     /// <param name="query"></param>
-    /// <param name="cancellation"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<TResponse> HandleAsync(TQuery query, CancellationToken cancellation);
+    Task<TResponse> HandleAsync(TQuery query, CancellationToken cancellationToken);
 }
 
