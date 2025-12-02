@@ -16,7 +16,7 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
     /// <returns></returns>
     public async Task AddOrUpdateRangeAsync(
         IEnumerable<Genre> genres,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         foreach (var genre in genres)
         {
@@ -36,7 +36,7 @@ public class GenreRepository(XgpLibDbContext context) : IGenreRepository
     /// <returns></returns>
     public async Task<Genre?> GetGenreById(
         long genreId,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         return await _context.Genres.FindAsync([genreId], cancellationToken);
     }

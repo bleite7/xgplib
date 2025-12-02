@@ -15,10 +15,7 @@ public sealed class UnitOfWork : IUnitOfWork
     /// 
     /// </summary>
     /// <param name="context"></param>
-    public UnitOfWork(XgpLibDbContext context)
-    {
-        _context = context;
-    }
+    public UnitOfWork(XgpLibDbContext context) => _context = context;
 
     /// <summary>
     /// 

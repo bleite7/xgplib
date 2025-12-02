@@ -18,7 +18,7 @@ public class IgdbService(HttpClient httpClient) : IIgdbService
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken = default) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
+    public Task<IEnumerable<IgdbGenre>> FetchGenresAsync(CancellationToken cancellationToken) => FetchAllPagedAsync<IgdbGenre>("genres", "name,slug", null, cancellationToken);
 
     /// <summary>
     /// 
@@ -26,7 +26,7 @@ public class IgdbService(HttpClient httpClient) : IIgdbService
     /// <param name="platformsIds"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformsAsync(int[] platformsIds, CancellationToken cancellationToken = default)
+    public Task<IEnumerable<IgdbGame>> FetchGamesByPlatformsAsync(int[] platformsIds, CancellationToken cancellationToken)
     {
         var platformsFilter = string.Join(",", platformsIds);
         var whereClause = $"platforms = ({platformsFilter})";

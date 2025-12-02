@@ -71,21 +71,21 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
     /// <summary>
     /// Publish a message to a specified topic
     /// </summary>
-    /// <param name="queue">The queue to publish the message to</param>
+    /// <param name="topic">The queue to publish the message to</param>
     /// <param name="message">The message to publish</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Task</returns>
     public async Task PublishMessageAsync(
-        string queue,
+        string topic,
         string message,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         try
         {
             var connection = await _connectionLazy.Value;
             using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
 
-            await DeclareQueueWithDlqAsync(channel, queue, cancellationToken);
+            await DeclareQueueWithDlqAsync(channel, topic, cancellationToken);
 
             var body = Encoding.UTF8.GetBytes(message);
             var properties = new BasicProperties
@@ -96,17 +96,17 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
 
             await channel.BasicPublishAsync(
                 exchange: "",
-                routingKey: queue,
+                routingKey: topic,
                 mandatory: false,
                 basicProperties: properties,
                 body: body,
                 cancellationToken: cancellationToken);
 
-            _logger.LogInformation("Message {Message} published to queue {Queue}", message, queue);
+            _logger.LogInformation("Message {Message} published to queue {Queue}", message, topic);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to publish message {Message} to queue {Queue}", message, queue);
+            _logger.LogError(ex, "Failed to publish message {Message} to queue {Queue}", message, topic);
             throw;
         }
     }
@@ -121,7 +121,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
     public async Task<List<string>> ReceiveMessagesAsync(
         string topic,
         int maxMessages,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         var messages = new List<string>();
         try
@@ -177,7 +177,7 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
         string queue,
         string message,
         string reason,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         try
         {
@@ -264,7 +264,10 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
 
     #region IDisposable
 
-    void IDisposable.Dispose()
+    /// <summary>
+    /// Dispose the RabbitMqService and its resources.
+    /// </summary>
+    public void Dispose()
     {
         if (_disposed) return;
         try

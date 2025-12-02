@@ -16,7 +16,7 @@ public class GameRepository(XgpLibDbContext context) : IGameRepository
     /// <returns></returns>
     public async Task AddOrUpdateRangeAsync(
         IEnumerable<Game> games,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         foreach (var game in games)
         {
