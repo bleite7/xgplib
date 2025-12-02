@@ -31,4 +31,6 @@ RUN dotnet publish "./XgpLib.SyncService.WorkerServices.csproj" -c $BUILD_CONFIG
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+USER $APP_UID
 ENTRYPOINT ["dotnet", "XgpLib.SyncService.WorkerServices.dll"]
