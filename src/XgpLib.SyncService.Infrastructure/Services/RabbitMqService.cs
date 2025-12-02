@@ -18,8 +18,8 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
     private readonly Lazy<Task<IConnection>> _connectionLazy;
     private bool _disposed;
 
-    private static short MIN_BOUNDARY = 1;
-    private static short MAX_BOUNDARY = 500;
+    private static short MIN_BOUNDARY = short.MinValue;
+    private static short MAX_BOUNDARY = short.MaxValue;
 
     /// <summary>
     /// Constructor for RabbitMqService.
