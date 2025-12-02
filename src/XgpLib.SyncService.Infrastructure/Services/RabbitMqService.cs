@@ -133,12 +133,12 @@ public class RabbitMqService : IMessageBrokerService, IDisposable
             var connection = await _connectionLazy.Value;
             using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
 
-            _logger.LogInformation("Attempting to receive up to {MaxMessages} messages from queue {Queue}", maxMessages, topic);
-
             if (MIN_BOUNDARY > maxMessages)
                 maxMessages = MIN_BOUNDARY;
-            else if (maxMessages >MAX_BOUNDARY)
+            else if (maxMessages > MAX_BOUNDARY)
                 maxMessages = MAX_BOUNDARY;
+
+            _logger.LogInformation("Attempting to receive up to {MaxMessages} messages from queue {Queue}", maxMessages, topic);
 
             // Receive messages
             for (short i = 0; i < maxMessages; i++)
